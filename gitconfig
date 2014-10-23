@@ -1,0 +1,10 @@
+[user]
+	name = exatto
+	email = exatto0@gmail.com
+[credential]
+	helper = osxkeychain
+[core]
+	editor = vim
+	excludesfile = /Users/exatto/.gitignore_global
+[push]
+	default = simple

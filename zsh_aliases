@@ -1,0 +1,21 @@
+# Temp shortcuts
+alias ini='find . -type f -name "*.ini" -print  -exec ../../src/engine {} \;'
+alias wkserver='vagrant ssh -- python /vagrant/src/manage.py runserver 0.0.0.0:8000'
+
+# Shell 
+alias j='jump'
+alias m='mark'
+alias c='clear'
+alias q='clear && exit'
+alias log='tail /var/log/system.log'
+alias wget='wget -P ~/Downloads'
+alias vimrc='vim ~/.vimrc'
+alias src='source ~/.zshrc'
+
+# Utilities
+alias ip='curl https://icanhazip.com/'
+alias mus='mosh -p 60925 us'
+alias t='todo.sh -d ~/.todo.cfg -A -c'
+alias vit='vim ~/Documents/Personal/todo.txt'
+alias update='brew update && brew upgrade && brew cleanup && brew cask cleanup'
+alias texupdate='tlmgr update --self --all --reinstall-forcibly-removed'
