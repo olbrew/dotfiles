@@ -100,6 +100,11 @@ export TODOTXT_DEFAULT_ACTION=ls
 export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
+# Boot2Docker comfig
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/exatto/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
+
 ## Extra functions
 # Systemwide search
 search()
@@ -109,6 +114,6 @@ search()
 
 # Todo desktop folders
 function todo() {
-    set -e
-    touch ~/Desktop/"$*"
+set -e
+touch ~/Desktop/"$*"
 }

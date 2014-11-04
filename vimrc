@@ -168,7 +168,7 @@ nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>r :YcmForceCompileAndDiagnostics<CR>
-nnoremap <Leader>l :Latexmk<CR> <bar> :LatexmkClean<CR>
+nnoremap <Leader>l :Latexmk<CR> :LatexmkClean<CR>
 nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>t :CommandT<CR>
 nnoremap <Leader>b :CommandTBuffer<CR>
@@ -195,3 +195,8 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers=1
 let g:airline#extensions#tabline#buffer_min_count=2
 let g:airline_powerline_fonts=1
+
+" LatexBox
+let g:LatexBox_quickfix=3
+let g:LatexBox_autojump=1
+let g:LatexBox_show_warnings=0
