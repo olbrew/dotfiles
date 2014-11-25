@@ -4,4 +4,3 @@ ignore = [
     '.git',
     '.gitignore',
     '*.swp']
-

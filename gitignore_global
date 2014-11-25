@@ -40,5 +40,6 @@ Thumbs.db
 # Help programs #
 #################
 *.swp
+*.un~
 tags
 .tags
