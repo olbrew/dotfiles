@@ -25,6 +25,7 @@ Plugin 'tpope/vim-dispatch'               " Asynchronous compiling
 Plugin 'bling/vim-airline'                " Fancy statusline
 Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'sjl/gundo.vim'                    " Visual undo-tree
+Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 "Plugin 'suan/vim-instant-markdown' " Instant  markdown preview
 
 " Vundle end
@@ -84,24 +85,24 @@ set ignorecase
 set smartcase
 set showmatch
 
-" Wrap text automatically
+" Textwrapping
 set wrap
-set textwidth=80
+"set textwidth=80
+set showbreak=↪\ 
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+" Undofile for undoes over vim sessions
+set undofile
 
 " Save file when vim loses focus
 au FocusLost * :wa
-
-" Disable arrow key navigation
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-nnoremap j gj
-nnoremap k gk
 
 " Set background for colors
 set background=dark
@@ -110,7 +111,9 @@ set background=dark
 au BufRead,BufNewFile *.md set filetype=markdown
 
 " Enable mouse support
-set mouse=a
+if has('mouse')
+  set mouse=a
+endif
 
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en_us,nl
@@ -135,8 +138,23 @@ let mapleader=","
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Remaps                                         "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Disable arrow key navigation
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap j gj
+nnoremap k gk
+
 " Remap escape
 inoremap jj <ESC>
+
+" Unmap Ex mode
+ map Q <Nop> 
 
 " Set pastetoggle
 set pastetoggle=<Leader>p
@@ -167,7 +185,7 @@ nnoremap <Leader>s :set spell!<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
-nnoremap <Leader>r :YcmForceCompileAndDiagnostics<CR>
+nnoremap <Leader>y :YcmDiags<CR>
 nnoremap <Leader>l :Latexmk<CR> :LatexmkClean<CR>
 nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>t :CommandT<CR>
@@ -195,6 +213,13 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers=1
 let g:airline#extensions#tabline#buffer_min_count=2
 let g:airline_powerline_fonts=1
+
+" Easymotion
+map <Leader> <Plug>(easymotion-prefix)
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap s <Plug>(easymotion-s)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
 
 " LatexBox
 let g:LatexBox_quickfix=3
