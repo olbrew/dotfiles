@@ -11,7 +11,7 @@ alias log='tail /var/log/system.log'
 alias wget='wget -P ~/Downloads'
 alias vimrc='vim ~/.vimrc'
 alias src='source ~/.zshrc'
-alias gcc='gcc -std=c++11'
+alias c++='clang++ -std=c++11 -Wall -Wextra'
 
 # Utilities
 alias ip='curl https://icanhazip.com/'
