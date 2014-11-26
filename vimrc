@@ -98,9 +98,6 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-" Undofile for undoes over vim sessions
-set undofile
-
 " Save file when vim loses focus
 au FocusLost * :wa
 
