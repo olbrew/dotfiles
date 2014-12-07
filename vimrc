@@ -17,6 +17,7 @@ Plugin 'Chiel92/vim-autoformat'           " autoformatting
 Plugin 'LaTeX-Box-Team/LaTeX-Box'         " LateX support
 Plugin 'wincent/command-t'                " Fuzzy file finder
 Plugin 'tpope/vim-surround'               " Vim features for brackets, quotes, ...
+Plugin 'tpope/vim-obsession'              " Saves and restores vim sessions
 Plugin 'junegunn/goyo.vim'                " Distraction free mode
 Plugin 'SirVer/ultisnips'                 " Snippets support
 Plugin 'honza/vim-snippets'               " Built-in snippet defaults
