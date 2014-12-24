@@ -96,10 +96,6 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/usr/local/caskroom
 # todo.txt options:
 export TODOTXT_DEFAULT_ACTION=ls
 
-# Ruby rbenv config
-export RBENV_ROOT=/usr/local/var/rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 # Boot2Docker comfig
 export DOCKER_HOST=tcp://192.168.59.103:2376
 export DOCKER_CERT_PATH=/Users/exatto/.boot2docker/certs/boot2docker-vm

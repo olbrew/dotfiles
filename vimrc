@@ -27,6 +27,7 @@ Plugin 'bling/vim-airline'                " Fancy statusline
 Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'sjl/gundo.vim'                    " Visual undo-tree
 Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
+Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
 "Plugin 'suan/vim-instant-markdown' " Instant  markdown preview
 
 " Vundle end
@@ -88,34 +89,47 @@ set showmatch
 
 " Textwrapping
 set wrap
-"set textwidth=80
-set showbreak=↪\ 
+set textwidth=80
+"set showbreak=↪
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
 " Only define it when not defined already.
 if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+                \ | wincmd p | diffthis
 endif
-
-" Save file when vim loses focus
-au FocusLost * :wa
 
 " Set background for colors
 set background=dark
 
-" Recognize md files as markdown
-au BufRead,BufNewFile *.md set filetype=markdown
-
 " Enable mouse support
 if has('mouse')
-  set mouse=a
+    set mouse=a
 endif
+
+" Save file when vim loses focus or change to another buffer
+autocmd BufLeave,FocusLost * :wa
+
+" Recognize md files as markdown
+autocmd BufRead,BufNewFile *.md set filetype=markdown
 
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en_us,nl
 autocmd FileType markdown setlocal spell spelllang=en_us,nl
+
+" Compile LaTeX docs on save
+function! CompileLatex()
+    :Latexmk
+    :LatexmkClean
+endfunction
+autocmd BufWritePost *.tex call CompileLatex()
+
+" Automatically remove trailing whitespaces
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+autocmd BufWritePre * call TrimWhiteSpace()
 
 " System clipboard functionality
 set clipboard+=unnamed
@@ -152,7 +166,7 @@ nnoremap k gk
 inoremap jj <ESC>
 
 " Unmap Ex mode
- map Q <Nop> 
+map Q <Nop>
 
 " Set pastetoggle
 set pastetoggle=<Leader>p
@@ -184,11 +198,11 @@ nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>y :YcmDiags<CR>
-nnoremap <Leader>l :Latexmk<CR> :LatexmkClean<CR>
 nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>t :CommandT<CR>
 nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
+nnoremap <Leader>w :Obsession .session.vim<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
