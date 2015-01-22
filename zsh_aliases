@@ -2,7 +2,7 @@
 alias ini='find . -type f -name "*.ini" -print  -exec ../../src/engine {} \;'
 alias wkserver='vagrant ssh -- python /vagrant/src/manage.py runserver 0.0.0.0:8000'
 
-# Shell 
+# Shell
 alias j='jump'
 alias m='mark'
 alias c='clear'
@@ -11,7 +11,7 @@ alias rm='trash'
 alias log='tail /var/log/system.log'
 alias vimrc='vim ~/.vimrc'
 alias src='source ~/.zshrc'
-alias c++='clang++ -std=c++11 -Wall -Wextra'
+alias c++='clang++ -std=c++14 -Wall -Wextra'
 
 # Utilities
 alias ip='curl https://icanhazip.com/'

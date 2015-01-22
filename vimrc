@@ -118,19 +118,6 @@ autocmd BufRead,BufNewFile *.md set filetype=markdown
 autocmd FileType tex setlocal spell spelllang=en_us,nl
 autocmd FileType markdown setlocal spell spelllang=en_us,nl
 
-" Compile LaTeX docs on save
-function! CompileLatex()
-    :Latexmk
-    :LatexmkClean
-endfunction
-autocmd BufWritePost *.tex call CompileLatex()
-
-" Automatically remove trailing whitespaces
-function! TrimWhiteSpace()
-    %s/\s\+$//e
-endfunction
-autocmd BufWritePre * call TrimWhiteSpace()
-
 " System clipboard functionality
 set clipboard+=unnamed
 
@@ -146,6 +133,23 @@ command! Bd bp | bd#
 
 " Map leader to 'space'
 let mapleader=","
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Functions                                      "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Compile LaTeX docs on save
+" Dependency: LatexBox plugin
+function! CompileLatex()
+    :Latexmk
+    :LatexmkClean
+endfunction
+autocmd BufWritePost *.tex call CompileLatex()
+
+" Automatically remove trailing whitespaces
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+autocmd BufWritePre * call TrimWhiteSpace()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Remaps                                         "
@@ -214,11 +218,11 @@ let g:ycm_global_ycm_extra_conf = '~/.vim/cfg/ycm_extra_conf.py'
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-"let g:UltiSnipsSnippetDirectories=["cfg"]
+let g:UltiSnipsSnippetDirectories=["cfg"]
 
 " Autoformat
 let g:formatprg_cpp = "astyle"
-let g:formatprg_args_expr_cpp = '"--mode=c --style=ansi -Y --max-code-length=80 --break-after-logical -k1 -pcUH".(&expandtab ? "s".&shiftwidth : "t")'
+let g:formatprg_args_expr_cpp = '"--mode=c --style=ansi -Y -N --max-code-length=80 --break-after-logical -k1 -pcUH".(&expandtab ? "s".&shiftwidth : "t")'
 
 " Airline
 let g:airline#extensions#tabline#enabled=1
@@ -226,7 +230,7 @@ let g:airline#extensions#tabline#show_buffers=1
 let g:airline#extensions#tabline#buffer_min_count=2
 let g:airline_powerline_fonts=1
 
-" Easymotion
+" EasymotionG
 map <Leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 nmap s <Plug>(easymotion-s)
@@ -237,3 +241,7 @@ map <Leader>k <Plug>(easymotion-k)
 let g:LatexBox_quickfix=3
 let g:LatexBox_autojump=1
 let g:LatexBox_show_warnings=0
+
+" CommandT
+let g:CommandTFileScanner="find"
+let g:CommandTTraverseSCM="pwd"
