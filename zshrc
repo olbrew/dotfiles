@@ -96,19 +96,10 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/usr/local/caskroom
 # todo.txt options:
 export TODOTXT_DEFAULT_ACTION=ls
 
-# Boot2Docker comfig
+# Boot2Docker config
 export DOCKER_HOST=tcp://192.168.59.103:2376
 export DOCKER_CERT_PATH=/Users/exatto/.boot2docker/certs/boot2docker-vm
 export DOCKER_TLS_VERIFY=1
-
-# Homebrew OpenSSH
-# Kill ssh-agent on exit
-eval $(ssh-agent)
-function cleanup {
-    echo "Killing SSH-Agent"
-    kill -9 $SSH_AGENT_PID
-}
-trap cleanup EXIT
 
 ## Extra functions
 # Systemwide search
