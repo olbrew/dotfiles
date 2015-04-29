@@ -51,7 +51,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/MacGPG2/bin:/usr/texbin:/usr/local/var/rbenv/shims:/usr/local/sbin"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/texbin:/usr/local/var/rbenv/shims:/usr/local/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -59,13 +59,13 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/loca
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+export ARCHFLAGS="-arch x86_64"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
@@ -77,8 +77,13 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/loca
 source  ~/.zsh_aliases
 
 ## Non-standard user config
-# Display system info on startup
-archey -c
+# explicitly support unicode
+# this makes sure tmux recognizes utf-8 support
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Prevent duplicate lines in history
+setopt HIST_IGNORE_DUPS
 
 # Set default user, keep agnoster theme happy
 DEFAULT_USER="exatto"
@@ -113,3 +118,8 @@ function todo() {
 set -e
 touch ~/Desktop/"$*"
 }
+
+## Tmp config
+# set classpath for antlr tool in java
+export CLASSPATH=".:/usr/local/lib/antlr-4.5-complete.jar:$CLASSPATH"
+export SSH_AUTH_SOCK='' vagrant

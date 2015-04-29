@@ -28,6 +28,7 @@ Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'sjl/gundo.vim'                    " Visual undo-tree
 Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
+Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
 "Plugin 'suan/vim-instant-markdown' " Instant  markdown preview
 
 " Vundle end
@@ -195,7 +196,6 @@ vnoremap : ;
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>c 1z=
 nnoremap <Leader>f :Autoformat<CR><CR>
 nnoremap <Leader>s :set spell!<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>

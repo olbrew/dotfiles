@@ -1,6 +1,8 @@
 # Temp shortcuts
 alias ini='find . -type f -name "*.ini" -print  -exec ../../src/engine {} \;'
-alias wkserver='vagrant ssh -- python /vagrant/src/manage.py runserver 0.0.0.0:8000'
+alias l2p='vagrant ssh -- python3 /vagrant/src/manage.py runserver 0.0.0.0:8000'
+alias antlr4='java -jar /usr/local/lib/antlr-4.5-complete.jar'
+alias grun='java org.antlr.v4.runtime.misc.TestRig'
 
 # Shell
 alias j='jump'
@@ -17,6 +19,7 @@ alias c++='clang++ -std=c++14 -Wall -Wextra'
 alias ip='curl https://icanhazip.com/'
 alias t='todo.sh -d ~/.todo.cfg -A -c'
 alias vit='vim ~/Documents/Personal/todo.txt'
+alias vis='vim ~/Documents/Personal/schedule.md'
 alias bru='brew update && brew upgrade && brew cleanup && brew cask cleanup && brew prune'
 alias texu='tlmgr update --self --all --reinstall-forcibly-removed'
 alias axel='axel -o ~/Downloads'
