@@ -5,7 +5,7 @@
 	helper = osxkeychain
 [core]
 	editor = vim
-	excludesfile = /Users/exatto/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [push]
 	default = simple
 [alias]
