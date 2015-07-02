@@ -2,6 +2,11 @@
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Vim needs a POSIX-Compliant shell. Fish is not.
+if $SHELL =~ 'bin/fish'
+    set shell=/bin/bash
+endif
+
 " Remove vim/vi compatibility for Vundle init
 set nocompatible
 
@@ -13,7 +18,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " Plugins
 Plugin 'Valloric/YouCompleteMe'           " Autocomplete support
-Plugin 'Chiel92/vim-autoformat'           " autoformatting
+Plugin 'Chiel92/vim-autoformat'           " Autoformatting
+Plugin 'tpope/vim-fugitive'               " Git wrapper
 Plugin 'LaTeX-Box-Team/LaTeX-Box'         " LateX support
 Plugin 'wincent/command-t'                " Fuzzy file finder
 Plugin 'tpope/vim-surround'               " Vim features for brackets, quotes, ...
@@ -23,8 +29,8 @@ Plugin 'SirVer/ultisnips'                 " Snippets support
 Plugin 'honza/vim-snippets'               " Built-in snippet defaults
 Plugin 'godlygeek/tabular'                " Align things
 Plugin 'tpope/vim-dispatch'               " Asynchronous compiling
+Plugin 'chriskempson/base16-vim'          " Base16 Solarized colorscheme
 Plugin 'bling/vim-airline'                " Fancy statusline
-Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'sjl/gundo.vim'                    " Visual undo-tree
 Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
@@ -44,7 +50,10 @@ syntax on
 set encoding=utf-8
 
 " Solarized colorscheme
-colorscheme solarized
+colorscheme base16-solarized
+
+" Set background for colors
+set background=dark
 
 " Bash-like file completion
 set wildmenu
@@ -68,6 +77,9 @@ set number
 set relativenumber
 set ruler
 
+" Always show status line
+set laststatus=2
+
 " Allow backspace in insert
 set backspace=indent,eol,start
 
@@ -90,11 +102,8 @@ set showmatch
 
 " Textwrapping
 set wrap
-set textwidth=80
+"set textwidth=80
 "set showbreak=↪
-
-" Set background for colors
-set background=dark
 
 " Enable mouse support
 if has('mouse')
@@ -173,6 +182,9 @@ inoremap jj <ESC>
 " Unmap Ex mode
 map Q <Nop>
 
+" Y yanks to end of line
+noremap Y y$
+
 " Set pastetoggle
 set pastetoggle=<Leader>p
 
@@ -207,6 +219,7 @@ nnoremap <Leader>t :CommandT<CR>
 nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsession .session.vim<CR>
+nnoremap <Leader>m :Make<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
@@ -222,7 +235,7 @@ let g:UltiSnipsSnippetDirectories=["cfg"]
 
 " Autoformat
 let g:formatprg_cpp = "astyle"
-let g:formatprg_args_expr_cpp = '"--mode=c --style=ansi -Y -N --max-code-length=80 --break-after-logical -k1 -pcUH".(&expandtab ? "s".&shiftwidth : "t")'
+let g:formatprg_args_expr_cpp = '"--mode=c --style=allman --max-code-length=80 -k1 -xy -p -c -N -U -H".(&expandtab ? "s".&shiftwidth : "t")'
 
 " Airline
 let g:airline#extensions#tabline#enabled=1
@@ -243,5 +256,4 @@ let g:LatexBox_autojump=1
 let g:LatexBox_show_warnings=0
 
 " CommandT
-let g:CommandTFileScanner="find"
-let g:CommandTTraverseSCM="pwd"
+let g:CommandTFileScanner="git"
