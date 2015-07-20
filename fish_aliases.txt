@@ -1,0 +1,22 @@
+abbr src 'source ~/.config/fish/config.fish'
+abbr ls 'ls -lhG'
+abbr g git
+abbr m mark
+abbr l ls
+abbr j jump
+abbr vimrc 'vim ~/.vimrc'
+abbr vit 'vim ~/Documents/Personal/todo.txt'
+abbr bru 'brew update; brew upgrade --all; brew cleanup; brew cask cleanup; brew prune'
+abbr c clear
+abbr q 'clear; exit'
+abbr log 'tail /var/log/system.log'
+abbr 'c++' 'clang++ -std=c++14 -Wall -Wextra'
+abbr ip 'curl https://icanhazip.com/'
+abbr t 'todo.sh -d ~/.todo.cfg -A -c'
+abbr vis 'vim ~/Documents/Personal/schedule.md'
+abbr texu 'tlmgr update --self --all --reinstall-forcibly-removed'
+abbr axel 'axel -o ~/Downloads'
+abbr yt 'youtube-dl -o \'~/Downloads/%(title)s.%(ext)s\''
+abbr grun 'java org.antlr.v4.runtime.misc.TestRig'
+abbr gst 'git status'
+abbr gc 'git commit'
