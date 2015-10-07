@@ -22,6 +22,7 @@ Plugin 'Chiel92/vim-autoformat'           " Autoformatting
 Plugin 'tpope/vim-fugitive'               " Git wrapper
 Plugin 'LaTeX-Box-Team/LaTeX-Box'         " LateX support
 Plugin 'wincent/command-t'                " Fuzzy file finder
+"Plugin 'rking/ag.vim'                     " Lightning fast code search
 Plugin 'tpope/vim-surround'               " Vim features for brackets, quotes, ...
 Plugin 'tpope/vim-obsession'              " Saves and restores vim sessions
 Plugin 'junegunn/goyo.vim'                " Distraction free mode
@@ -161,6 +162,12 @@ if !exists(":DiffOrig")
                 \ | wincmd p | diffthis
 endif
 
+" Fast code searching with Ag - The Silver Surfer
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+endif
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Remaps                                         "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -205,6 +212,12 @@ nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
+" Bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" Bind \ (backward slash) to grep shortcut
+command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -220,6 +233,7 @@ nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsession .session.vim<CR>
 nnoremap <Leader>m :Make<CR>
+nnoremap \ :Ag<SPACE>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
@@ -257,3 +271,4 @@ let g:LatexBox_show_warnings=0
 
 " CommandT
 let g:CommandTFileScanner="git"
+let g:CommandTTraverseSCM="pwd"
