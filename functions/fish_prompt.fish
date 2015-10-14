@@ -9,6 +9,7 @@
 
 ## Set this options in your config.fish (if you want to :])
 # set -g theme_display_user yes
+# set -g theme_hide_hostname yes
 # set -g default_user your_normal_user
 
 
@@ -88,27 +89,69 @@ end
 # Theme components
 # ===========================
 
-function prompt_user -d "Display actual user if different from $default_user"
+function prompt_virtual_env -d "Display Python virtual environment"
+  if test "$VIRTUAL_ENV"
+    prompt_segment white black (basename $VIRTUAL_ENV)
+  end
+end
+
+function prompt_user -d "Display current user if different from $default_user"
   if [ "$theme_display_user" = "yes" ]
     if [ "$USER" != "$default_user" -o -n "$SSH_CLIENT" ]
-      set USER_PROMPT (whoami)@(hostname)
+      set USER (whoami)
+      get_hostname
+      if [ $HOSTNAME_PROMPT ]
+        set USER_PROMPT $USER@$HOSTNAME_PROMPT
+      else
+        set USER_PROMPT $USER
+      end
       prompt_segment black yellow $USER_PROMPT
+    end
+  else
+    get_hostname
+    if [ $HOSTNAME_PROMPT ]
+      prompt_segment black yellow $HOSTNAME_PROMPT
     end
   end
 end
 
-function prompt_dir -d "Display the actual directory"
+function get_hostname -d "Set current hostname to prompt variable $HOSTNAME_PROMPT if connected via SSH"
+  set -g HOSTNAME_PROMPT ""
+  if [ "$theme_hide_hostname" != "yes" -a -n "$SSH_CLIENT" ]
+    set -g HOSTNAME_PROMPT (hostname)
+  end
+end
+
+function prompt_dir -d "Display the current directory"
   prompt_segment blue black (prompt_pwd)
 end
 
 
+function prompt_hg -d "Display mercurial state"
+  set -l branch
+  set -l state
+  if command hg id >/dev/null 2>&1
+    if command hg prompt >/dev/null 2>&1
+      set branch (command hg prompt "{branch}")
+      set state (command hg prompt "{status}")
+      set branch_symbol \uE0A0
+      if [ "$state" = "!" ]
+        prompt_segment red white "$branch_symbol $branch ±"
+      else if [ "$state" = "?" ]
+          prompt_segment yellow black "$branch_symbol $branch ±"
+        else
+          prompt_segment green black "$branch_symbol $branch"
+      end
+    end
+  end
+end
 
-function prompt_git -d "Display the actual git state"
+
+function prompt_git -d "Display the current git state"
   set -l ref
   set -l dirty
   if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
     set dirty (parse_git_dirty)
-    set ref (command git symbolic-ref HEAD 2> /dev/null)
     set ref (command git symbolic-ref HEAD 2> /dev/null)
     if [ $status -gt 0 ]
       set -l branch (command git show-ref --head -s --abbrev |head -n1 2> /dev/null)
@@ -124,13 +167,16 @@ function prompt_git -d "Display the actual git state"
   end
 end
 
+
 function prompt_svn -d "Display the current svn state"
   set -l ref
-  if command svn ls . >/dev/null 2>&1
-    set branch (svn_get_branch)
-    set branch_symbol \uE0A0
-    set revision (svn_get_revision)
-    prompt_segment green black "$branch_symbol $branch:$revision"
+  if type svn >/dev/null 2>&1;
+    if command svn ls . >/dev/null 2>&1
+      set branch (svn_get_branch)
+      set branch_symbol \uE0A0
+      set revision (svn_get_revision)
+      prompt_segment green black "$branch_symbol $branch:$revision"
+    end
   end
 end
 
@@ -150,6 +196,7 @@ end
 function svn_get_revision -d "get the current revision number"
   svn info 2> /dev/null | sed -n 's/Revision:\ //p'
 end
+
 
 function prompt_status -d "the symbols for a non zero exit status, root and background jobs"
     if [ $RETVAL -ne 0 ]
@@ -175,9 +222,11 @@ end
 function fish_prompt
   set -g RETVAL $status
   prompt_status
+  prompt_virtual_env
   prompt_user
   prompt_dir
-  prompt_svn
+  #prompt_hg
   prompt_git
+  prompt_svn
   prompt_finish
 end
