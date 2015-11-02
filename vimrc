@@ -22,7 +22,6 @@ Plugin 'Chiel92/vim-autoformat'           " Autoformatting
 Plugin 'tpope/vim-fugitive'               " Git wrapper
 Plugin 'LaTeX-Box-Team/LaTeX-Box'         " LateX support
 Plugin 'wincent/command-t'                " Fuzzy file finder
-"Plugin 'rking/ag.vim'                     " Lightning fast code search
 Plugin 'tpope/vim-surround'               " Vim features for brackets, quotes, ...
 Plugin 'tpope/vim-obsession'              " Saves and restores vim sessions
 Plugin 'junegunn/goyo.vim'                " Distraction free mode
@@ -33,9 +32,11 @@ Plugin 'tpope/vim-dispatch'               " Asynchronous compiling
 Plugin 'chriskempson/base16-vim'          " Base16 Solarized colorscheme
 Plugin 'bling/vim-airline'                " Fancy statusline
 Plugin 'sjl/gundo.vim'                    " Visual undo-tree
-Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
 Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
+Plugin 'Raimondi/delimitMate'             " Automatically matching parentheses, ...
+"Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
+"Plugin 'rking/ag.vim'                     " Lightning fast code search
 "Plugin 'suan/vim-instant-markdown' " Instant  markdown preview
 
 " Vundle end
@@ -231,10 +232,11 @@ nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>t :CommandT<CR>
 nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
-nnoremap <Leader>w :Obsession .session.vim<CR>
+nnoremap <Leader>w :Obsess .session.vim<CR>
 nnoremap <Leader>m :Make<CR>
 nnoremap \ :Ag<SPACE>
-
+map <C-K> :pyf /usr/local/Cellar/clang-format/2015-07-31/share/clang/clang-format.py<cr>
+imap <C-K> <c-o>:pyf /usr/local/Cellar/clang-format/2015-07-31/share/clang/clang-format.py<cr>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -258,11 +260,11 @@ let g:airline#extensions#tabline#buffer_min_count=2
 let g:airline_powerline_fonts=1
 
 " EasymotionG
-map <Leader> <Plug>(easymotion-prefix)
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-nmap s <Plug>(easymotion-s)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+"map <Leader> <Plug>(easymotion-prefix)
+"let g:EasyMotion_do_mapping = 0 " Disable default mappings
+"nmap s <Plug>(easymotion-s)
+"map <Leader>j <Plug>(easymotion-j)
+"map <Leader>k <Plug>(easymotion-k)
 
 " LatexBox
 let g:LatexBox_quickfix=3
