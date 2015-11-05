@@ -36,8 +36,7 @@ Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family lan
 Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
 Plugin 'Raimondi/delimitMate'             " Automatically matching parentheses, ...
 "Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
-"Plugin 'rking/ag.vim'                     " Lightning fast code search
-"Plugin 'suan/vim-instant-markdown' " Instant  markdown preview
+"Plugin 'suan/vim-instant-markdown'        " Instant  markdown preview
 
 " Vundle end
 call vundle#end()
@@ -135,6 +134,9 @@ let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
 " Command for closing buffer without corresponding window
 command! Bd bp | bd#
 
+" Autoformat buffer on write
+au BufWrite * :Autoformat
+
 " Map leader to 'space'
 let mapleader=","
 
@@ -153,6 +155,7 @@ autocmd BufWritePost *.tex call CompileLatex()
 function! TrimWhiteSpace()
     %s/\s\+$//e
 endfunction
+" And execute it automatically on buffer write
 autocmd BufWritePre * call TrimWhiteSpace()
 
 " Convenient command to see the difference between the current buffer and the
@@ -165,8 +168,8 @@ endif
 
 " Fast code searching with Ag - The Silver Surfer
 if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+    " Use ag over grep
+    set grepprg=ag\ --nogroup\ --nocolor
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -204,8 +207,8 @@ nnoremap <silent> zj o<Esc>k
 nnoremap <silent> zk O<Esc>j
 
 " Scroll faster through command history
-cnoremap <c-j> <down>
-cnoremap <c-k> <up>
+"cnoremap <c-j> <down>
+"cnoremap <c-k> <up>
 
 " Switch ':' with ';' for faster commands (without <S>)
 nnoremap ; :
@@ -214,15 +217,15 @@ vnoremap ; :
 vnoremap : ;
 
 " Bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap S :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Bind \ (backward slash) to grep shortcut
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+"command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+nnoremap \ :Ag<SPACE>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>f :Autoformat<CR><CR>
 nnoremap <Leader>s :set spell!<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>e :Lexplore<CR>
@@ -234,9 +237,7 @@ nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsess .session.vim<CR>
 nnoremap <Leader>m :Make<CR>
-nnoremap \ :Ag<SPACE>
-map <C-K> :pyf /usr/local/Cellar/clang-format/2015-07-31/share/clang/clang-format.py<cr>
-imap <C-K> <c-o>:pyf /usr/local/Cellar/clang-format/2015-07-31/share/clang/clang-format.py<cr>
+nnoremap <Leader>c :cw<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -249,22 +250,11 @@ let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsSnippetDirectories=["cfg"]
 
-" Autoformat
-let g:formatprg_cpp = "astyle"
-let g:formatprg_args_expr_cpp = '"--mode=c --style=allman --max-code-length=80 -k1 -xy -p -c -N -U -H".(&expandtab ? "s".&shiftwidth : "t")'
-
 " Airline
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#show_buffers=1
 let g:airline#extensions#tabline#buffer_min_count=2
 let g:airline_powerline_fonts=1
-
-" EasymotionG
-"map <Leader> <Plug>(easymotion-prefix)
-"let g:EasyMotion_do_mapping = 0 " Disable default mappings
-"nmap s <Plug>(easymotion-s)
-"map <Leader>j <Plug>(easymotion-j)
-"map <Leader>k <Plug>(easymotion-k)
 
 " LatexBox
 let g:LatexBox_quickfix=3
