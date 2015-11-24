@@ -35,6 +35,7 @@ Plugin 'sjl/gundo.vim'                    " Visual undo-tree
 Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
 Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
 Plugin 'Raimondi/delimitMate'             " Automatically matching parentheses, ...
+Plugin 'rking/ag.vim'                     " Ag-vim integration
 Plugin 'christoomey/vim-tmux-navigator'   " Consistent vim, tmux window mappings
 "Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 "Plugin 'suan/vim-instant-markdown'        " Instant  markdown preview
@@ -170,7 +171,7 @@ endif
 " Fast code searching with Ag - The Silver Surfer
 if executable('ag')
     " Use ag over grep
-    set grepprg=ag\ --nogroup\ --nocolor
+    set grepprg=ag\ --nogroup
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
