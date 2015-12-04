@@ -17,6 +17,8 @@ set -x COPYFILE_DISABLE 'true'
 set -x HOMEBREW_CASK_OPTS '--appdir=/Applications --caskroom=/usr/local/caskroom'
 # todo.txt options:
 set -x TODOTXT_DEFAULT_ACTION 'ls'
+# no insecure redirect for homebrew
+set -x HOMEBREW_NO_INSECURE_REDIRECT 'true'
 
 ## Custom jump loading
 set -gx MARKPATH $HOME/.marks
