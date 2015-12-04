@@ -1,12 +1,19 @@
 [user]
-	name = olbrew
-	email = olbrew@users.noreply.github.com
+name = olbrew
+email = olbrew@users.noreply.github.com
 [credential]
-	helper = osxkeychain
+helper = osxkeychain
 [core]
-	editor = vim
-	excludesfile = ~/.gitignore_global
+editor = vim
+excludesfile = ~/.gitignore_global
 [push]
-	default = simple
+default = simple
+[color]
+ui = auto
 [alias]
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+st = status
+a = add
+c = commit -m
+ci = commit
+pl = pull
+lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
