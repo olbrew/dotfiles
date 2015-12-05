@@ -37,6 +37,7 @@ Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
 Plugin 'Raimondi/delimitMate'             " Automatically matching parentheses, ...
 Plugin 'rking/ag.vim'                     " Ag-vim integration
 Plugin 'christoomey/vim-tmux-navigator'   " Consistent vim, tmux window mappings
+Plugin 'airblade/vim-gitgutter'           " Show git diff sings in gutter
 "Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
 "Plugin 'suan/vim-instant-markdown'        " Instant  markdown preview
 
@@ -137,7 +138,7 @@ let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
 command! Bd bp | bd#
 
 " Autoformat buffer on write
-au BufWrite * :Autoformat
+au BufWrite *.cpp,*.h,*.cc,*.hh :Autoformat
 
 " Map leader to 'space'
 let mapleader=","
