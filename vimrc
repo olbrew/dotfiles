@@ -59,6 +59,9 @@ colorscheme base16-solarized
 " Set background for colors
 set background=dark
 
+" Don't lose undo history when changing buffers
+set hidden
+
 " Bash-like file completion
 set wildmenu
 set wildmode=list:longest,full
