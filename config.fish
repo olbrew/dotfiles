@@ -2,9 +2,7 @@
 set --erase fish_greeting
 
 # Vi keybindings
-fish_vi_mode
 set fish_key_bindings fish_user_key_bindings
-set fish_bind_mode insert
 
 ## Environment variables
 # Editor
