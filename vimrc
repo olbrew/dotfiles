@@ -4,45 +4,47 @@
 
 " Vim needs a POSIX-Compliant shell. Fish is not.
 if $SHELL =~ 'bin/fish'
-    set shell=/bin/bash
+    set shell=/bin/sh
 endif
 
-" Remove vim/vi compatibility for Vundle init
+" Remove vim/vi compatibility
 set nocompatible
 
-" Vundle start
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  Plugins                                     "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Plugins
-Plugin 'Valloric/YouCompleteMe'           " Autocomplete support
-Plugin 'Chiel92/vim-autoformat'           " Autoformatting
-Plugin 'tpope/vim-fugitive'               " Git wrapper
-Plugin 'LaTeX-Box-Team/LaTeX-Box'         " LateX support
-Plugin 'wincent/command-t'                " Fuzzy file finder
-Plugin 'tpope/vim-surround'               " Vim features for brackets, quotes, ...
-Plugin 'tpope/vim-obsession'              " Saves and restores vim sessions
-Plugin 'junegunn/goyo.vim'                " Distraction free mode
-Plugin 'SirVer/ultisnips'                 " Snippets support
-Plugin 'honza/vim-snippets'               " Built-in snippet defaults
-Plugin 'godlygeek/tabular'                " Align things
-Plugin 'tpope/vim-dispatch'               " Asynchronous compiling
-Plugin 'chriskempson/base16-vim'          " Base16 Solarized colorscheme
-Plugin 'bling/vim-airline'                " Fancy statusline
-Plugin 'sjl/gundo.vim'                    " Visual undo-tree
-Plugin 'scrooloose/syntastic'             " Syntax checking for non C-family languages
-Plugin 'ryanss/vim-hackernews'            " HackerNews plugin
-Plugin 'Raimondi/delimitMate'             " Automatically matching parentheses, ...
-Plugin 'rking/ag.vim'                     " Ag-vim integration
-Plugin 'christoomey/vim-tmux-navigator'   " Consistent vim, tmux window mappings
-Plugin 'airblade/vim-gitgutter'           " Show git diff sings in gutter
-"Plugin 'Lokaltog/vim-easymotion'          " Faster vim motions
-"Plugin 'suan/vim-instant-markdown'        " Instant  markdown preview
+" [Vim-Plug](https://github.com/junegunn/vim-plug)
+call plug#begin('~/.vim/bundle')
 
-" Vundle end
-call vundle#end()
+Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
+Plug 'Chiel92/vim-autoformat'                           " Autoformatting
+Plug 'tpope/vim-fugitive'                               " Git wrapper
+Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
+Plug 'wincent/command-t'                                " Fuzzy file finder
+Plug 'tpope/vim-surround'                               " Vim features for brackets, quotes, ...
+Plug 'tpope/vim-obsession'                              " Saves and restores vim sessions
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }              " Distraction free mode
+Plug 'SirVer/ultisnips'                                 " Snippets support
+Plug 'honza/vim-snippets'                               " Built-in snippet defaults
+Plug 'godlygeek/tabular'                                " Align things
+Plug 'tpope/vim-dispatch'                               " Asynchronous compiling
+Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
+Plug 'bling/vim-airline'                                " Fancy statusline
+Plug 'sjl/gundo.vim'                                    " Visual undo-tree
+Plug 'scrooloose/syntastic'                             " Syntax checking for non C-family languages
+Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews plugin
+Plug 'Raimondi/delimitMate'                             " Automatically matching parentheses, ...
+Plug 'rking/ag.vim'                                     " Ag-vim integration
+Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
+Plug 'airblade/vim-gitgutter'                           " Show git diff sings in gutter
+"Plug 'Lokaltog/vim-easymotion'                         " Faster vim motions
+
+call plug#end()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                                  General                                     "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Enable filetype detection & indenting
 filetype plugin indent on
