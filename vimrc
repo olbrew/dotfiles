@@ -2,18 +2,9 @@
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Vim needs a POSIX-Compliant shell. Fish is not.
-if $SHELL =~ 'bin/fish'
-    set shell=/bin/sh
-endif
-
-" Remove vim/vi compatibility
-set nocompatible
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Plugins                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " [Vim-Plug](https://github.com/junegunn/vim-plug)
 call plug#begin('~/.vim/bundle')
 
@@ -21,39 +12,41 @@ Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
-Plug 'wincent/command-t'                                " Fuzzy file finder
-Plug 'tpope/vim-surround'                               " Vim features for brackets, quotes, ...
-Plug 'tpope/vim-obsession'                              " Saves and restores vim sessions
+Plug 'tpope/vim-obsession'                              " Vim session management
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }              " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
-Plug 'godlygeek/tabular'                                " Align things
+Plug 'junegunn/vim-easy-align'                          " Align things
 Plug 'tpope/vim-dispatch'                               " Asynchronous compiling
-Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
+Plug 'chriskempson/base16-vim'          " Base16 Solarized colorscheme
 Plug 'bling/vim-airline'                                " Fancy statusline
 Plug 'sjl/gundo.vim'                                    " Visual undo-tree
-Plug 'scrooloose/syntastic'                             " Syntax checking for non C-family languages
-Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews plugin
-Plug 'Raimondi/delimitMate'                             " Automatically matching parentheses, ...
-Plug 'rking/ag.vim'                                     " Ag-vim integration
+Plug 'scrooloose/syntastic'                             " Syntax checker
+Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
+Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
+Plug 'rking/ag.vim'                                     " Ag integration
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'                                 " fzf integration
 Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
-Plug 'airblade/vim-gitgutter'                           " Show git diff sings in gutter
-"Plug 'Lokaltog/vim-easymotion'                         " Faster vim motions
+Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
+Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
+Plug 'Lokaltog/vim-easymotion'                          " Faster vim motions
 
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim needs a POSIX-Compliant shell. Fish is not.
+if $SHELL =~ 'bin/fish'
+    set shell=/bin/sh
+endif
 
 " Enable filetype detection & indenting
 filetype plugin indent on
 
 " Enable syntax highlighting
 syntax on
-
-" Set standard encoding to utf-8
-set encoding=utf-8
 
 " Solarized colorscheme
 colorscheme base16-solarized
@@ -111,8 +104,9 @@ set showmatch
 
 " Textwrapping
 set wrap
-"set textwidth=80
-"set showbreak=↪
+set textwidth=80
+let &showbreak='↪  '
+set linebreak
 
 " Enable mouse support
 if has('mouse')
@@ -126,8 +120,13 @@ autocmd BufLeave,FocusLost * :wa
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 
 " Enable spell checking for prose
-autocmd FileType tex setlocal spell spelllang=en_us,nl
-autocmd FileType markdown setlocal spell spelllang=en_us,nl
+autocmd FileType tex setlocal spell spelllang=en,nl
+autocmd FileType text setlocal spell spelllang=en,nl
+autocmd FileType markdown setlocal spell spelllang=en,nl
+autocmd FileType gitcommit setlocal spell spelllang=en,nl
+
+" Add spelling suggestions to autocomplete
+set complete+=kspell
 
 " System clipboard functionality
 set clipboard+=unnamed
@@ -143,10 +142,16 @@ let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
 command! Bd bp | bd#
 
 " Autoformat buffer on write
-au BufWrite *.cpp,*.h,*.cc,*.hh :Autoformat
+au BufWrite * :Autoformat
+
+" Fast code searching with Ag - The Silver Surfer
+if executable('ag')
+    " Use ag over grep
+    set grepprg=ag\ --nogroup\ --nocolor
+endif
 
 " Map leader to 'space'
-let mapleader=","
+let mapleader=" "
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Functions                                      "
@@ -174,12 +179,6 @@ if !exists(":DiffOrig")
                 \ | wincmd p | diffthis
 endif
 
-" Fast code searching with Ag - The Silver Surfer
-if executable('ag')
-    " Use ag over grep
-    set grepprg=ag\ --nogroup
-endif
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Remaps                                         "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -194,8 +193,8 @@ endif
 "inoremap <right> <nop>
 
 " Better vertical movement with linewrappings
-nnoremap j gj
-nnoremap k gk
+"nnoremap j gj
+"nnoremap k gk
 
 " Remap escape
 inoremap jj <ESC>
@@ -217,8 +216,8 @@ nnoremap <silent> zj o<Esc>k
 nnoremap <silent> zk O<Esc>j
 
 " Scroll faster through command history
-"cnoremap <c-j> <down>
-"cnoremap <c-k> <up>
+cnoremap <c-n> <down>
+cnoremap <c-p> <up>
 
 " Switch ':' with ';' for faster commands (without <S>)
 nnoremap ; :
@@ -227,37 +226,45 @@ vnoremap ; :
 vnoremap : ;
 
 " Bind K to grep word under cursor
-nnoremap S :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+"nnoremap S :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Bind \ (backward slash) to grep shortcut
-"command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+if !exists(":Ag")
+    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+endif
 nnoremap \ :Ag<SPACE>
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>s :set spell!<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>y :YcmDiags<CR>
 nnoremap <Leader>r :so $MYVIMRC<CR>
-nnoremap <Leader>t :CommandT<CR>
-nnoremap <Leader>b :CommandTBuffer<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsess .session.vim<CR>
 nnoremap <Leader>m :Make<CR>
-nnoremap <Leader>c :cw<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " YouCompleteMe global C++ compilation flags
 let g:ycm_global_ycm_extra_conf = '~/.vim/cfg/ycm_extra_conf.py'
 
+" Don't fall back to the vim indent file for Autformat
+let g:autoformat_autoindent = 0
+
 " Ultisnips
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-n>"
+let g:UltiSnipsJumpBackwardTrigger="<c-p>"
 let g:UltiSnipsSnippetDirectories=["cfg"]
 
 " Airline
@@ -270,7 +277,3 @@ let g:airline_powerline_fonts=1
 let g:LatexBox_quickfix=3
 let g:LatexBox_autojump=1
 let g:LatexBox_show_warnings=0
-
-" CommandT
-let g:CommandTFileScanner="git"
-let g:CommandTTraverseSCM="pwd"
