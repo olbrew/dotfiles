@@ -8,7 +8,7 @@
 " [Vim-Plug](https://github.com/junegunn/vim-plug)
 call plug#begin('~/.vim/bundle')
 
-Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' } " Autocomplete support
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
@@ -18,7 +18,7 @@ Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
 Plug 'junegunn/vim-easy-align'                          " Align things
 Plug 'tpope/vim-dispatch'                               " Asynchronous compiling
-Plug 'chriskempson/base16-vim'          " Base16 Solarized colorscheme
+Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
 Plug 'bling/vim-airline'                                " Fancy statusline
 Plug 'sjl/gundo.vim'                                    " Visual undo-tree
 Plug 'scrooloose/syntastic'                             " Syntax checker
@@ -168,16 +168,7 @@ autocmd BufWritePost *.tex call CompileLatex()
 function! TrimWhiteSpace()
     %s/\s\+$//e
 endfunction
-" And execute it automatically on buffer write
 autocmd BufWritePre * call TrimWhiteSpace()
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-                \ | wincmd p | diffthis
-endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Remaps                                         "
