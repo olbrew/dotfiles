@@ -19,6 +19,8 @@ set -x FZF_DEFAULT_COMMAND 'ag -g ""'
 set -x TODOTXT_DEFAULT_ACTION 'ls'
 # no insecure redirect for homebrew
 set -x HOMEBREW_NO_INSECURE_REDIRECT 'true'
+# gopath
+set -x GOPATH $HOME/Code/go
 
 ## Custom jump loading
 set -gx MARKPATH $HOME/.marks
