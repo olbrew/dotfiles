@@ -19,8 +19,14 @@ set -x FZF_DEFAULT_COMMAND 'ag -g ""'
 set -x TODOTXT_DEFAULT_ACTION 'ls'
 # no insecure redirect for homebrew
 set -x HOMEBREW_NO_INSECURE_REDIRECT 'true'
+# disable homebrew analytics
+set -x HOMEBREW_NO_ANALYTICS 1
 # gopath
-set -x GOPATH $HOME/Code/go
+set -x GOPATH $HOME/Developer/go
+# Go variable for Docker Machine - Xhyve support
+set -x GO15VENDOREXPERIMENT 1
+# Set antlr4 to classpath -- TMP
+set -x CLASSPATH '.:/usr/local/Cellar/antlr/4.5.2/antlr-4.5.2-complete.jar:$CLASSPATH'
 
 ## Custom jump loading
 set -gx MARKPATH $HOME/.marks
