@@ -1,4 +1,4 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -8,7 +8,7 @@
 " [Vim-Plug](https://github.com/junegunn/vim-plug)
 call plug#begin('~/.vim/bundle')
 
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' } " Autocomplete support
+Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
@@ -19,18 +19,18 @@ Plug 'honza/vim-snippets'                               " Built-in snippet defau
 Plug 'junegunn/vim-easy-align'                          " Align things
 Plug 'tpope/vim-dispatch'                               " Asynchronous compiling
 Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
-Plug 'bling/vim-airline'                                " Fancy statusline
+Plug 'vim-airline/vim-airline'                          " Fancy statusline
+Plug 'vim-airline/vim-airline-themes'                   " Airline themes
 Plug 'sjl/gundo.vim'                                    " Visual undo-tree
 Plug 'scrooloose/syntastic'                             " Syntax checker
 Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
 Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
-Plug 'rking/ag.vim'                                     " Ag integration
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'                                 " fzf integration
+Plug 'junegunn/fzf.vim'                                 " FZF integration
 Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
 Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
 Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
 Plug 'Lokaltog/vim-easymotion'                          " Faster vim motions
+Plug 'amperser/proselint'                               " Linter for prose
 
 call plug#end()
 
@@ -38,7 +38,7 @@ call plug#end()
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim needs a POSIX-Compliant shell. Fish is not.
-if $SHELL =~ 'bin/fish'
+if &shell =~# 'fish$'
     set shell=/bin/sh
 endif
 
@@ -73,6 +73,10 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set softtabstop=4
+
+" Decrease timeout for key sequences
+set ttimeout
+set ttimeoutlen=100
 
 " Show line numbers
 set number
@@ -147,11 +151,15 @@ au BufWrite * :Autoformat
 " Fast code searching with Ag - The Silver Surfer
 if executable('ag')
     " Use ag over grep
-    set grepprg=ag\ --nogroup\ --nocolor
+    let &grepprg='ag --nogroup --nocolor'
 endif
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
-" Map leader to 'space'
-let mapleader=" "
+" Persistent undo
+set undofile
+set undodir=$HOME/.vim/undo
+set undolevels=1000
+set undoreload=10000
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Functions                                      "
@@ -170,9 +178,58 @@ function! TrimWhiteSpace()
 endfunction
 autocmd BufWritePre * call TrimWhiteSpace()
 
+" Search and replace on all buffers
+function! SeR(search, replace)
+    bufdo %s/a:search/a:replace/ge | update
+endfunction
+
+" Update Ctags if a tags file has been found
+function! UpdateCTags()
+    :! ctags -R --exclude=.git --exclude=doc --languages=-javascript,sql --append -f ../.tags
+endfunction
+set tags=.tags;..;../..
+
+" Helper functions to allow UltiSnips to work with YCM and <tab>s
+" Enable tabbing through list of results
+function! g:UltiSnips_Complete()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips#JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
+endfunction
+
+au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+
+" Expand snippet or return
+let g:ulti_expand_res = 0
+function! Ulti_ExpandOrEnter()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res
+        return ''
+    else
+        return "\<return>"
+endfunction
+
+" Set <space> as primary trigger
+inoremap <return> <C-R>=Ulti_ExpandOrEnter()<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Remaps                                         "
+"                                Maps                                          "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Map Space to leader
+map <Space> <Leader>
+
+" Workaround for easymotion
+map <space><space> <leader><leader>
+
 " Disable arrow key navigation
 "nnoremap <up> <nop>
 "nnoremap <down> <nop>
@@ -183,9 +240,23 @@ autocmd BufWritePre * call TrimWhiteSpace()
 "inoremap <left> <nop>
 "inoremap <right> <nop>
 
+" Faster buffer switching
+nnoremap J :bprevious<CR>
+nnoremap K :bnext<CR>
+
 " Better vertical movement with linewrappings
 "nnoremap j gj
 "nnoremap k gk
+
+" Nvim terminal
+if has('nvim')
+    nnoremap <Leader>t :vsp term://fish<CR>
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <A-h> <C-\><C-n><C-w>h
+    tnoremap <A-j> <C-\><C-n><C-w>j
+    tnoremap <A-k> <C-\><C-n><C-w>k
+    tnoremap <A-l> <C-\><C-n><C-w>l
+endif
 
 " Remap escape
 inoremap jj <ESC>
@@ -216,15 +287,20 @@ nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
+" Stamp words - Change word with (paste) value from register
+nnoremap S diw"0P
+
 " Bind K to grep word under cursor
-"nnoremap S :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+"nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Bind \ (backward slash) to grep shortcut
 if !exists(":Ag")
     command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
-nnoremap \ :Ag<SPACE>
+"nnoremap \ :Ag<SPACE>
+
+" Add FZF to vim runtimepath
+set rtp+=/usr/local/opt/fzf
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -236,6 +312,7 @@ nmap ga <Plug>(EasyAlign)
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
+nnoremap <Leader>x :YcmCompleter FixIt<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>y :YcmDiags<CR>
@@ -243,19 +320,26 @@ nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsess .session.vim<CR>
 nnoremap <Leader>m :Make<CR>
+nnoremap <Leader>n :Neomake!<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>f :FZF<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf = '~/.vim/cfg/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf='~/.vim/cfg/ycm_extra_conf.py'
 
 " Don't fall back to the vim indent file for Autformat
-let g:autoformat_autoindent = 0
+let g:autoformat_autoindent=0
+
+" FZF
+let g:fzf_layout={ 'down': '20%' }
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger="<c-e>"
-let g:UltiSnipsJumpForwardTrigger="<c-n>"
-let g:UltiSnipsJumpBackwardTrigger="<c-p>"
+let g:UltiSnipsExpandTrigger       ="<c-tab>"
+let g:UltiSnipsJumpForwardTrigger  = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 let g:UltiSnipsSnippetDirectories=["cfg"]
 
 " Airline
@@ -268,3 +352,11 @@ let g:airline_powerline_fonts=1
 let g:LatexBox_quickfix=3
 let g:LatexBox_autojump=1
 let g:LatexBox_show_warnings=0
+
+" Proselint - Syntastic
+let g:syntastic_text_checkers = ['proselint']
+let g:syntastic_help_checkers = ['proselint']
+let g:syntastic_html_checkers = ['proselint']
+let g:syntastic_markdown_checkers = ['proselint']
+let g:syntastic_tex_checkers = ['proselint']
+let g:syntastic_texinfo_checkers = ['proselint']
