@@ -1,8 +1,8 @@
 # Remove fish default greeting
 set --erase fish_greeting
 
-# Vi keybindings
-set fish_key_bindings fish_user_key_bindings
+## Vi keybindings
+fish_vi_key_bindings
 
 ## Environment variables
 # Editor
@@ -23,12 +23,3 @@ set -x HOMEBREW_NO_INSECURE_REDIRECT 'true'
 set -x HOMEBREW_NO_ANALYTICS 1
 # gopath
 set -x GOPATH $HOME/Developer/go
-# Set antlr4 to classpath -- TMP
-set -x CLASSPATH '.:/usr/local/Cellar/antlr/4.5.2/antlr-4.5.2-complete.jar:$CLASSPATH'
-
-## Custom jump loading
-set -gx MARKPATH $HOME/.marks
-command mkdir -p $MARKPATH
-
-complete -c jump -f -a '(ls ~/.marks)'
-complete -c unmark -f -a '(ls ~/.marks)'
