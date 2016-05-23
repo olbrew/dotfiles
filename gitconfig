@@ -6,15 +6,15 @@
 [core]
     editor = vim
     excludesfile = ~/.gitignore_global
+    pager = less -R
 [push]
     default = simple
-[color]
-    ui = auto
 [alias]
     s = status
     a = add
     c = commit
     cm = commit -m
+    d = diff
     pl = pull
     ps = push
     l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
