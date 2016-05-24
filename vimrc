@@ -48,6 +48,9 @@ filetype plugin indent on
 " Enable syntax highlighting
 syntax on
 
+" Enable True Color
+set termguicolors
+
 " Solarized colorscheme
 colorscheme base16-solarized
 
@@ -252,6 +255,7 @@ nnoremap K :bnext<CR>
 if has('nvim')
     nnoremap <Leader>t :vsp term://fish<CR>
     tnoremap <Esc> <C-\><C-n>
+    tnoremap jj <C-\><C-n>
     tnoremap <A-h> <C-\><C-n><C-w>h
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
@@ -297,7 +301,7 @@ nnoremap S diw"0P
 if !exists(":Ag")
     command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
-"nnoremap \ :Ag<SPACE>
+nnoremap \ :Ag<SPACE>
 
 " Add FZF to vim runtimepath
 set rtp+=/usr/local/opt/fzf
@@ -334,6 +338,7 @@ let g:ycm_global_ycm_extra_conf='~/.vim/cfg/ycm_extra_conf.py'
 let g:autoformat_autoindent=0
 
 " FZF
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 let g:fzf_layout={ 'down': '20%' }
 
 " Ultisnips
@@ -360,3 +365,7 @@ let g:syntastic_html_checkers = ['proselint']
 let g:syntastic_markdown_checkers = ['proselint']
 let g:syntastic_tex_checkers = ['proselint']
 let g:syntastic_texinfo_checkers = ['proselint']
+
+"" Temporary workarounds
+" Allow Neovim to move left on <C-h>
+nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
