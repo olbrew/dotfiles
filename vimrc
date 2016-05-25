@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -9,6 +9,7 @@
 call plug#begin('~/.vim/bundle')
 
 Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
+Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
@@ -17,18 +18,15 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }              " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
 Plug 'junegunn/vim-easy-align'                          " Align things
-Plug 'tpope/vim-dispatch'                               " Asynchronous compiling
 Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
 Plug 'vim-airline/vim-airline'                          " Fancy statusline
 Plug 'vim-airline/vim-airline-themes'                   " Airline themes
 Plug 'sjl/gundo.vim'                                    " Visual undo-tree
-Plug 'scrooloose/syntastic'                             " Syntax checker
 Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
 Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
 Plug 'junegunn/fzf.vim'                                 " FZF integration
 Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
 Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
-Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
 Plug 'Lokaltog/vim-easymotion'                          " Faster vim motions
 Plug 'amperser/proselint'                               " Linter for prose
 
@@ -323,8 +321,8 @@ nnoremap <Leader>y :YcmDiags<CR>
 nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>u :GundoToggle<CR>
 nnoremap <Leader>w :Obsess .session.vim<CR>
-nnoremap <Leader>m :Make<CR>
-nnoremap <Leader>n :Neomake!<CR>
+nnoremap <Leader>m :Neomake!<CR>
+nnoremap <Leader>n :Neomake<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>f :FZF<CR>
 
@@ -333,6 +331,9 @@ nnoremap <Leader>f :FZF<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " YouCompleteMe global C++ compilation flags
 let g:ycm_global_ycm_extra_conf='~/.vim/cfg/ycm_extra_conf.py'
+
+" Run Neomake linter when opening or saving buffers
+autocmd BufWritePost,BufEnter * Neomake
 
 " Don't fall back to the vim indent file for Autformat
 let g:autoformat_autoindent=0
@@ -357,14 +358,6 @@ let g:airline_powerline_fonts=1
 let g:LatexBox_quickfix=3
 let g:LatexBox_autojump=1
 let g:LatexBox_show_warnings=0
-
-" Proselint - Syntastic
-let g:syntastic_text_checkers = ['proselint']
-let g:syntastic_help_checkers = ['proselint']
-let g:syntastic_html_checkers = ['proselint']
-let g:syntastic_markdown_checkers = ['proselint']
-let g:syntastic_tex_checkers = ['proselint']
-let g:syntastic_texinfo_checkers = ['proselint']
 
 "" Temporary workarounds
 " Allow Neovim to move left on <C-h>
