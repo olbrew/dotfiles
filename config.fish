@@ -12,7 +12,7 @@ set -x ARCHFLAGS '-arch x86_64'
 # Prevent ._* files from being written
 set -x COPYFILE_DISABLE 'true'
 # Homebrew caskroom
-set -x HOMEBREW_CASK_OPTS '--appdir=/Applications --caskroom=/usr/local/caskroom'
+set -x HOMEBREW_CASK_OPTS '--caskroom=/usr/local/caskroom'
 # Let fzf use `ag` instead of `find`
 set -x FZF_DEFAULT_COMMAND 'ag -g ""'
 # todo.txt options:
