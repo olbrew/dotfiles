@@ -6,7 +6,7 @@
 "                                  Plugins                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " [Vim-Plug](https://github.com/junegunn/vim-plug)
-call plug#begin('~/.vim/bundle')
+call plug#begin()
 
 Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
 Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
@@ -160,7 +160,7 @@ command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " Persistent undo
 set undofile
-set undodir=$HOME/.vim/undo
+set undodir=$HOME/.config/nvim/undo
 set undolevels=1000
 set undoreload=10000
 
@@ -332,7 +332,7 @@ nnoremap <Leader>f :FZF<CR>
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf='~/.vim/cfg/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf='~/.config/nvim/cfg/ycm_extra_conf.py'
 
 " Run Neomake linter when opening or saving buffers
 autocmd BufWritePost,BufEnter * Neomake
