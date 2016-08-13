@@ -3,9 +3,6 @@ set --erase fish_greeting
 
 ## Vi keybindings
 fish_vi_key_bindings
-# Remove builtin vi mode indicator in favour of custom theme
-function fish_mode_prompt
-end function
 
 ## Environment variables
 # Editor
