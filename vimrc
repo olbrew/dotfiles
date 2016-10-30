@@ -5,10 +5,6 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim needs a POSIX-Compliant shell. Fish is not.
-if &shell =~# 'fish$'
-    set shell=/bin/sh
-endif
 
 " Enable filetype detection & indenting
 filetype plugin indent on
@@ -85,9 +81,6 @@ endif
 " Save file when vim loses focus or change to another buffer
 autocmd BufLeave,FocusLost * :wa
 
-" Recognize md files as markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
 autocmd FileType text setlocal spell spelllang=en,nl
@@ -110,21 +103,12 @@ let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
 " Command for closing buffer without corresponding window
 command! Bd bp | bd#
 
-" Autoformat buffer on write
-au BufWrite * :Autoformat
-
-" Fast code searching with Ag - The Silver Surfer
-if executable('ag')
-    " Use ag over grep
-    let &grepprg='ag --nogroup --nocolor'
+" Fast code searching with rg - Rip Grep
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
 endif
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
-" Persistent undo
-set undofile
-set undodir=$HOME/.vim/undo
-set undolevels=1000
-set undoreload=10000
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Functions                                      "
@@ -140,12 +124,6 @@ autocmd BufWritePre * call TrimWhiteSpace()
 function! SeR(search, replace)
     bufdo %s/a:search/a:replace/ge | update
 endfunction
-
-" Update Ctags if a tags file has been found
-function! UpdateCTags()
-    :! ctags -R --exclude=.git --exclude=doc --languages=-javascript,sql --append -f ../.tags
-endfunction
-set tags=.tags;..;../..
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                Maps                                          "
@@ -170,9 +148,6 @@ map Q <Nop>
 " Y yanks to end of line
 noremap Y y$
 
-" Set pastetoggle
-set pastetoggle=<Leader>p
-
 " Save files for which you didn't have permission
 cnoremap w!! w !sudo tee % >/dev/null
 
@@ -192,15 +167,6 @@ vnoremap : ;
 
 " Stamp words - Change word with (paste) value from register
 nnoremap S diw"0P
-
-" Bind K to grep word under cursor
-"nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-" Bind \ (backward slash) to grep shortcut
-if !exists(":Ag")
-    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-endif
-nnoremap \ :Ag<SPACE>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
