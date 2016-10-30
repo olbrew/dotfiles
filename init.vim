@@ -12,15 +12,14 @@ Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
 Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
-Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }       " LateX support
+Plug 'LaTeX-Box-Team/LaTeX-Box'                         " LateX support
 Plug 'tpope/vim-obsession'                              " Vim session management
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }              " Distraction free mode
+Plug 'junegunn/goyo.vim'                                " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
 Plug 'junegunn/vim-easy-align'                          " Align things
 Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
-Plug 'vim-airline/vim-airline'                          " Fancy statusline
-Plug 'vim-airline/vim-airline-themes'                   " Airline themes
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
 Plug 'sjl/gundo.vim'                                    " Visual undo-tree
 Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
 Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
@@ -28,23 +27,13 @@ Plug 'junegunn/fzf.vim'                                 " FZF integration
 Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
 Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
 Plug 'Lokaltog/vim-easymotion'                          " Faster vim motions
-Plug 'amperser/proselint'                               " Linter for prose
+Plug 'critiqjo/lldb.nvim'                               " LLDB integration
 
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim needs a POSIX-Compliant shell. Fish is not.
-if &shell =~# 'fish$'
-    set shell=/bin/sh
-endif
-
-" Enable filetype detection & indenting
-filetype plugin indent on
-
-" Enable syntax highlighting
-syntax on
 
 " Enable True Color
 set termguicolors
@@ -56,6 +45,9 @@ let base16colorspace=256
 
 " Set background for colors
 set background=dark
+
+" Disable swap files
+set noswapfile
 
 " Don't lose undo history when changing buffers
 set hidden
@@ -123,9 +115,6 @@ endif
 " Save file when vim loses focus or change to another buffer
 autocmd BufLeave,FocusLost * :wa
 
-" Recognize md files as markdown
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
 autocmd FileType text setlocal spell spelllang=en,nl
@@ -141,6 +130,9 @@ set clipboard+=unnamed
 " Disable scratch preview window on autocomplete
 set completeopt-=preview
 
+" Set makeprg to search for makefiles one directory up if one exists
+let &makeprg = '[[ -f Makefile ]] && make || make -C ..'
+
 " File explorer tree mode
 let g:netrw_liststyle=3
 let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
@@ -151,12 +143,11 @@ command! Bd bp | bd#
 " Autoformat buffer on write
 au BufWrite * :Autoformat
 
-" Fast code searching with Ag - The Silver Surfer
-if executable('ag')
-    " Use ag over grep
-    let &grepprg='ag --nogroup --nocolor'
+" Fast code searching with rg - RipGrepif executable('rg')
+if executable('rg')
+    set grepprg=rg\ --no-heading\ --vimgrep
+    set grepformat=%f:%l:%c:%m
 endif
-command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " Persistent undo
 set undofile
@@ -274,6 +265,9 @@ noremap Y y$
 " Set pastetoggle
 set pastetoggle=<Leader>p
 
+" Disable search highlight after searching
+nnoremap <c-L> :noh<return>
+
 " Save files for which you didn't have permission
 cnoremap w!! w !sudo tee % >/dev/null
 
@@ -295,13 +289,7 @@ vnoremap : ;
 nnoremap S diw"0P
 
 " Bind K to grep word under cursor
-"nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-" Bind \ (backward slash) to grep shortcut
-if !exists(":Ag")
-    command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-endif
-nnoremap \ :Ag<SPACE>
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Add FZF to vim runtimepath
 set rtp+=/usr/local/opt/fzf
@@ -316,6 +304,7 @@ nmap ga <Plug>(EasyAlign)
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
+autocmd FileType c nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<cr>
 nnoremap <Leader>x :YcmCompleter FixIt<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
@@ -341,7 +330,7 @@ autocmd BufWritePost,BufEnter * Neomake
 let g:autoformat_autoindent=0
 
 " FZF
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+let $FZF_DEFAULT_COMMAND = 'rg --vimgrep ""'
 let g:fzf_layout={ 'down': '20%' }
 
 " Ultisnips
