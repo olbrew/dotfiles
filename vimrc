@@ -2,6 +2,9 @@
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -146,7 +149,7 @@ inoremap jj <ESC>
 map Q <Nop>
 
 " Y yanks to end of line
-noremap Y y$
+map Y y$
 
 " Save files for which you didn't have permission
 cnoremap w!! w !sudo tee % >/dev/null

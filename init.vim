@@ -12,7 +12,7 @@ Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
 Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
-Plug 'LaTeX-Box-Team/LaTeX-Box'                         " LateX support
+Plug 'LaTeX-Box-Team/LaTeX-Box' , { 'for': 'tex' }      " LateX support
 Plug 'tpope/vim-obsession'                              " Vim session management
 Plug 'junegunn/goyo.vim'                                " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
@@ -20,13 +20,13 @@ Plug 'honza/vim-snippets'                               " Built-in snippet defau
 Plug 'junegunn/vim-easy-align'                          " Align things
 Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
-Plug 'sjl/gundo.vim'                                    " Visual undo-tree
+Plug 'mbbill/undotree'                                  " Visual undo-tree
 Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
 Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
 Plug 'junegunn/fzf.vim'                                 " FZF integration
 Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
 Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
-Plug 'Lokaltog/vim-easymotion'                          " Faster vim motions
+Plug 'easymotion/vim-easymotion'                        " Faster vim motions
 Plug 'critiqjo/lldb.nvim'                               " LLDB integration
 
 call plug#end()
@@ -103,9 +103,10 @@ set showmatch
 
 " Textwrapping
 set wrap
-set textwidth=80
+"set textwidth=80
 let &showbreak='↪  '
 set linebreak
+set breakindent
 
 " Enable mouse support
 if has('mouse')
@@ -288,8 +289,8 @@ vnoremap : ;
 " Stamp words - Change word with (paste) value from register
 nnoremap S diw"0P
 
-" Bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" Bind R to grep word under cursor
+nnoremap R :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " Add FZF to vim runtimepath
 set rtp+=/usr/local/opt/fzf
