@@ -13,8 +13,8 @@ set -x ARCHFLAGS '-arch x86_64'
 set -x COPYFILE_DISABLE 'true'
 # Homebrew caskroom
 set -x HOMEBREW_CASK_OPTS '--caskroom=/usr/local/caskroom'
-# Let fzf use `ag` instead of `find`
-set -x FZF_DEFAULT_COMMAND 'ag -g ""'
+# Let fzf use `rg` instead of `find`
+set -x FZF_DEFAULT_COMMAND 'rg -g ""'
 # todo.txt options:
 set -x TODOTXT_DEFAULT_ACTION 'ls'
 # no insecure redirect for homebrew
