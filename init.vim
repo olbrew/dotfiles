@@ -18,7 +18,7 @@ Plug 'junegunn/goyo.vim'                                " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
 Plug 'junegunn/vim-easy-align'                          " Align things
-Plug 'chriskempson/base16-vim'                          " Base16 Solarized colorscheme
+Plug 'lifepillar/vim-solarized8'                        " Solarized colorscheme
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
 Plug 'mbbill/undotree'                                  " Visual undo-tree
 Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
@@ -39,9 +39,7 @@ call plug#end()
 set termguicolors
 
 " Solarized colorscheme
-colorscheme base16-solarized-dark
-" Access colors present in 256 colorspace
-let base16colorspace=256
+colorscheme solarized8_dark_flat
 
 " Set background for colors
 set background=dark
@@ -53,7 +51,6 @@ set noswapfile
 set hidden
 
 " Bash-like file completion
-set wildmenu
 set wildmode=list:longest,full
 set wildignore+=*.o,*.d
 
@@ -61,9 +58,7 @@ set wildignore+=*.o,*.d
 set scrolloff=5
 
 " Tab space settings
-set autoindent
 set smartindent
-set smarttab
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -78,12 +73,6 @@ set number
 set relativenumber
 set ruler
 
-" Always show status line
-set laststatus=2
-
-" Allow backspace in insert
-set backspace=indent,eol,start
-
 " Show extra info about commands
 set showcmd
 set showmode
@@ -92,11 +81,9 @@ set showmode
 set visualbell
 
 " Reload file after external changes
-set autoread
 set autowrite
 
 " Search settings
-set incsearch
 set ignorecase
 set smartcase
 set showmatch
@@ -108,13 +95,8 @@ let &showbreak='↪  '
 set linebreak
 set breakindent
 
-" Enable mouse support
-if has('mouse')
-    set mouse=a
-endif
-
 " Save file when vim loses focus or change to another buffer
-autocmd BufLeave,FocusLost * :wa
+autocmd BufLeave,FocusLost * silent! wall
 
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
@@ -182,7 +164,6 @@ endfunction
 function! UpdateCTags()
     :! ctags -R --exclude=.git --exclude=doc --languages=-javascript,sql --append -f ../.tags
 endfunction
-set tags=.tags;..;../..
 
 " Helper functions to allow UltiSnips to work with YCM and <tab>s
 " Enable tabbing through list of results
@@ -200,7 +181,6 @@ function! g:UltiSnips_Complete()
     endif
     return ""
 endfunction
-
 au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
 
 " Expand snippet or return
@@ -225,23 +205,13 @@ map <Space> <Leader>
 " Workaround for easymotion
 map <space><space> <leader><leader>
 
-" Disable arrow key navigation
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
-
 " Faster buffer switching
 nnoremap J :bprevious<CR>
 nnoremap K :bnext<CR>
 
 " Better vertical movement with linewrappings
-"nnoremap j gj
-"nnoremap k gk
+nnoremap j gj
+nnoremap k gk
 
 " Nvim terminal
 if has('nvim')
