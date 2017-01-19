@@ -13,7 +13,7 @@ Plug 'benekastah/neomake'                               " Asynchronous make & sy
 Plug 'Chiel92/vim-autoformat'                           " Autoformatting
 Plug 'tpope/vim-fugitive'                               " Git wrapper
 Plug 'LaTeX-Box-Team/LaTeX-Box' , { 'for': 'tex' }      " LateX support
-Plug 'tpope/vim-obsession'                              " Vim session management
+Plug 'wting/gitsessions.vim'                            " Improved vim session management
 Plug 'junegunn/goyo.vim'                                " Distraction free mode
 Plug 'SirVer/ultisnips'                                 " Snippets support
 Plug 'honza/vim-snippets'                               " Built-in snippet defaults
@@ -50,12 +50,16 @@ set noswapfile
 " Don't lose undo history when changing buffers
 set hidden
 
+" Only redraw when necessary
+set lazyredraw
+
 " Bash-like file completion
 set wildmode=list:longest,full
 set wildignore+=*.o,*.d
 
-" Start scrolling when 5 lines away from margin
+" Better scrolling behaviour
 set scrolloff=5
+set sidescroll=1
 
 " Tab space settings
 set smartindent
@@ -98,6 +102,9 @@ set breakindent
 " Save file when vim loses focus or change to another buffer
 autocmd BufLeave,FocusLost * silent! wall
 
+" Recognize html files as templates becuase of issues with linters
+autocmd BufNewFile,BufRead *.html set filetype=htmldjango
+
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
 autocmd FileType text setlocal spell spelllang=en,nl
@@ -135,8 +142,6 @@ endif
 " Persistent undo
 set undofile
 set undodir=$HOME/.config/nvim/undo
-set undolevels=1000
-set undoreload=10000
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Functions                                      "
@@ -175,7 +180,7 @@ function! g:UltiSnips_Complete()
         else
             call UltiSnips#JumpForwards()
             if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
+                return "\<TAB>"
             endif
         endif
     endif
@@ -191,6 +196,7 @@ function! Ulti_ExpandOrEnter()
         return ''
     else
         return "\<return>"
+    endif
 endfunction
 
 " Set <space> as primary trigger
@@ -214,15 +220,14 @@ nnoremap j gj
 nnoremap k gk
 
 " Nvim terminal
-if has('nvim')
-    nnoremap <Leader>t :vsp term://fish<CR>
-    tnoremap <Esc> <C-\><C-n>
-    tnoremap jj <C-\><C-n>
-    tnoremap <A-h> <C-\><C-n><C-w>h
-    tnoremap <A-j> <C-\><C-n><C-w>j
-    tnoremap <A-k> <C-\><C-n><C-w>k
-    tnoremap <A-l> <C-\><C-n><C-w>l
-endif
+nnoremap <Leader>t :sp term://fish<CR>
+autocmd BufWinEnter,WinEnter term://* startinsert
+tnoremap <Esc> <C-\><C-n>
+tnoremap jj <C-\><C-n>
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
 
 " Remap escape
 inoremap jj <ESC>
@@ -235,12 +240,6 @@ noremap Y y$
 
 " Set pastetoggle
 set pastetoggle=<Leader>p
-
-" Disable search highlight after searching
-nnoremap <c-L> :noh<return>
-
-" Save files for which you didn't have permission
-cnoremap w!! w !sudo tee % >/dev/null
 
 " Enter newlines without entering insert mode
 nnoremap <silent> zj o<Esc>k
@@ -255,6 +254,9 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
+
+" Turn off search highlight
+nnoremap <leader>h :nohlsearch<CR>
 
 " Stamp words - Change word with (paste) value from register
 nnoremap S diw"0P
@@ -274,15 +276,15 @@ nmap ga <Plug>(EasyAlign)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <Leader>r :so $MYVIMRC<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
 autocmd FileType c nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<cr>
 nnoremap <Leader>x :YcmCompleter FixIt<CR>
+nnoremap <Leader>y :YcmDiags<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>d :Goyo<CR>
-nnoremap <Leader>y :YcmDiags<CR>
-nnoremap <Leader>r :so $MYVIMRC<CR>
-nnoremap <Leader>u :GundoToggle<CR>
-nnoremap <Leader>w :Obsess .session.vim<CR>
+nnoremap <Leader>u :UndotreeToggle<CR>
+nnoremap <Leader>w :GitSessionSave<cr>
 nnoremap <Leader>m :Neomake!<CR>
 nnoremap <Leader>n :Neomake<CR>
 nnoremap <Leader>b :Buffers<CR>
@@ -292,7 +294,10 @@ nnoremap <Leader>f :FZF<CR>
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf='~/.config/nvim/cfg/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.config/nvim/cfg/ycm_extra_conf.py'
+
+" Place vim sessions in neovim directory
+"let g:gitsessions_dir = '~/.config/nvim/sessions'
 
 " Run Neomake linter when opening or saving buffers
 autocmd BufWritePost,BufEnter * Neomake
