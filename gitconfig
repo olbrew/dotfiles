@@ -7,8 +7,13 @@
     editor = nvim
     excludesfile = ~/.gitignore_global
     pager = less -R
+[stash]
+    showPatch = true
+[log]
+    decorate = full
 [push]
     default = simple
+    followTags = true
 [alias]
     s = status
     a = add
@@ -20,3 +25,4 @@
     l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     lg = log
     co = checkout
+    prune = fetch --prune
