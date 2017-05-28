@@ -1,42 +1,61 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                Vim configuration                             "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Plugins                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" [Vim-Plug](https://github.com/junegunn/vim-plug)
+" Automatically install vim-plug if not yet present when opening init.vim
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter init.vim PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin()
-
-Plug 'Valloric/YouCompleteMe'                           " Autocomplete support
-Plug 'benekastah/neomake'                               " Asynchronous make & syntax checker
-Plug 'Chiel92/vim-autoformat'                           " Autoformatting
-Plug 'tpope/vim-fugitive'                               " Git wrapper
-Plug 'LaTeX-Box-Team/LaTeX-Box' , { 'for': 'tex' }      " LateX support
-Plug 'wting/gitsessions.vim'                            " Improved vim session management
-Plug 'junegunn/goyo.vim'                                " Distraction free mode
-Plug 'SirVer/ultisnips'                                 " Snippets support
-Plug 'honza/vim-snippets'                               " Built-in snippet defaults
-Plug 'junegunn/vim-easy-align'                          " Align things
-Plug 'lifepillar/vim-solarized8'                        " Solarized colorscheme
+Plug 'Valloric/YouCompleteMe'                        " Autocomplete support
+Plug 'neomake/neomake'                               " Asynchronous make & syntax checking
+Plug 'Chiel92/vim-autoformat'                        " Autoformatting
+Plug 'tpope/vim-repeat'                              " Repeat with . for plugins
+Plug 'tpope/vim-fugitive'                            " Git wrapper
+Plug 'tpope/vim-vinegar'                             " Netrw improved
+Plug 'tpope/vim-surround'                            " Quoting/parenthesizing made simple
+Plug 'wting/gitsessions.vim'                         " Improved vim session management
+Plug 'lifepillar/vim-solarized8'                     " Solarized colorscheme
+Plug 'Raimondi/delimitMate'                          " Auto match parentheses,...
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'  " FZF integration
+Plug 'christoomey/vim-tmux-navigator'                " Consistent vim, tmux window mappings
+Plug 'airblade/vim-gitgutter'                        " Git diff in gutter
+Plug 'easymotion/vim-easymotion'                     " Faster vim motions
+Plug 'critiqjo/lldb.nvim'                            " LLDB integration
+Plug 'Valloric/ListToggle'                           " Quickfix and locationlist toggle
+Plug 'pangloss/vim-javascript'                       " Javascript syntax and indentation
+Plug 'mxw/vim-jsx'                                   " JSX highlighting
+Plug 'StanAngeloff/php.vim'                          " PHP improved hightlighting
+Plug 'kassio/neoterm'                                " Wrapper for neovim terminal
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }   " Visual undo-tree
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }           " Distraction free mode
+Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' } " HackerNews in vim
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'  " Built-in snippet defaults
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
-Plug 'mbbill/undotree'                                  " Visual undo-tree
-Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' }    " HackerNews in vim
-Plug 'Raimondi/delimitMate'                             " Auto match parentheses,...
-Plug 'junegunn/fzf.vim'                                 " FZF integration
-Plug 'christoomey/vim-tmux-navigator'                   " Consistent vim, tmux window mappings
-Plug 'airblade/vim-gitgutter'                           " Git diff in gutter
-Plug 'easymotion/vim-easymotion'                        " Faster vim motions
-Plug 'critiqjo/lldb.nvim'                               " LLDB integration
-
+Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " Align things
 call plug#end()
+
+" Automatically install missing plugins when opening init.vim
+autocmd VimEnter init.vim
+            \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+            \|   PlugInstall --sync | q
+            \| endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  General                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set leader
+let mapleader      = ' '
+let maplocalleader = ' '
 
 " Enable True Color
-set termguicolors
+"set termguicolors
 
 " Solarized colorscheme
 colorscheme solarized8_dark_flat
@@ -50,12 +69,11 @@ set noswapfile
 " Don't lose undo history when changing buffers
 set hidden
 
-" Only redraw when necessary
-set lazyredraw
-
 " Bash-like file completion
 set wildmode=list:longest,full
-set wildignore+=*.o,*.d
+let &wildignore = join(map(split(substitute(substitute(
+            \ netrw_gitignore#Hide(), '\.\*', '*', 'g'), '\\.', '.', 'g'), ','),
+            \ "v:val.','.v:val.'/'"), ',')
 
 " Better scrolling behaviour
 set scrolloff=5
@@ -68,6 +86,9 @@ set shiftwidth=4
 set expandtab
 set softtabstop=4
 
+" Enable mouse support
+set mouse=a
+
 " Decrease timeout for key sequences
 set ttimeout
 set ttimeoutlen=100
@@ -75,14 +96,9 @@ set ttimeoutlen=100
 " Show line numbers
 set number
 set relativenumber
-set ruler
 
 " Show extra info about commands
-set showcmd
 set showmode
-
-" Visual warnings instead of audio
-set visualbell
 
 " Reload file after external changes
 set autowrite
@@ -91,19 +107,39 @@ set autowrite
 set ignorecase
 set smartcase
 set showmatch
+set incsearch
 
 " Textwrapping
 set wrap
-"set textwidth=80
+set textwidth=80
 let &showbreak='↪  '
 set linebreak
 set breakindent
 
+" Folding
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+set foldmethod=indent
+
+" Text formatting - Don't set two spaces after the end of a sentence
+set nojoinspaces
+
 " Save file when vim loses focus or change to another buffer
 autocmd BufLeave,FocusLost * silent! wall
 
-" Recognize html files as templates becuase of issues with linters
-autocmd BufNewFile,BufRead *.html set filetype=htmldjango
+" Recognize some html as templates becuase of issues with linters
+"autocmd BufNewFile,BufRead *.html set filetype=htmldjango
+autocmd BufNewFile,BufRead *.twig set filetype=htmldjango
+
+" Recognize partial files as full-fledged tex files
+let g:tex_flavor = 'latex'
+
+" Recognize HTML in PHP code
+let php_htmlInStrings = 1
+
+autocmd FileType tex BufWritePre !Latexmk -pdflua %
+autocmd FileType tex VimLeavePre !Latexmk -c
 
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
@@ -123,20 +159,12 @@ set completeopt-=preview
 " Set makeprg to search for makefiles one directory up if one exists
 let &makeprg = '[[ -f Makefile ]] && make || make -C ..'
 
-" File explorer tree mode
-let g:netrw_liststyle=3
-let g:netrw_list_hide= netrw_gitignore#Hide().'.*\.swp$'
-
 " Command for closing buffer without corresponding window
 command! Bd bp | bd#
 
-" Autoformat buffer on write
-au BufWrite * :Autoformat
-
-" Fast code searching with rg - RipGrepif executable('rg')
+" Fast code searching with rg - RipGrep
 if executable('rg')
-    set grepprg=rg\ --no-heading\ --vimgrep
-    set grepformat=%f:%l:%c:%m
+    set grepprg=rg\ --no-heading\ --vimgrep\ --smart-case
 endif
 
 " Persistent undo
@@ -146,29 +174,11 @@ set undodir=$HOME/.config/nvim/undo
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Functions                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Compile LaTeX docs on save
-" Dependency: LatexBox plugin
-function! CompileLatex()
-    :Latexmk
-    :LatexmkClean
-endfunction
-autocmd BufWritePost *.tex call CompileLatex()
-
 " Automatically remove trailing whitespaces
 function! TrimWhiteSpace()
     %s/\s\+$//e
 endfunction
 autocmd BufWritePre * call TrimWhiteSpace()
-
-" Search and replace on all buffers
-function! SeR(search, replace)
-    bufdo %s/a:search/a:replace/ge | update
-endfunction
-
-" Update Ctags if a tags file has been found
-function! UpdateCTags()
-    :! ctags -R --exclude=.git --exclude=doc --languages=-javascript,sql --append -f ../.tags
-endfunction
 
 " Helper functions to allow UltiSnips to work with YCM and <tab>s
 " Enable tabbing through list of results
@@ -205,32 +215,14 @@ inoremap <return> <C-R>=Ulti_ExpandOrEnter()<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                Maps                                          "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Map Space to leader
-map <Space> <Leader>
-
-" Workaround for easymotion
-map <space><space> <leader><leader>
-
-" Faster buffer switching
-nnoremap J :bprevious<CR>
-nnoremap K :bnext<CR>
-
-" Better vertical movement with linewrappings
-nnoremap j gj
-nnoremap k gk
-
-" Nvim terminal
-nnoremap <Leader>t :sp term://fish<CR>
-autocmd BufWinEnter,WinEnter term://* startinsert
-tnoremap <Esc> <C-\><C-n>
-tnoremap jj <C-\><C-n>
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
-
 " Remap escape
 inoremap jj <ESC>
+
+" Switch ':' with ';' for faster commands (without <S>)
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
 
 " Unmap Ex mode
 map Q <Nop>
@@ -238,8 +230,12 @@ map Q <Nop>
 " Y yanks to end of line
 noremap Y y$
 
-" Set pastetoggle
-set pastetoggle=<Leader>p
+" Workaround for easymotion
+map <space><space> <leader><leader>
+
+" Faster buffer switching
+nnoremap J :bprevious<CR>
+nnoremap K :bnext<CR>
 
 " Enter newlines without entering insert mode
 nnoremap <silent> zj o<Esc>k
@@ -249,23 +245,11 @@ nnoremap <silent> zk O<Esc>j
 cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 
-" Switch ':' with ';' for faster commands (without <S>)
-nnoremap ; :
-nnoremap : ;
-vnoremap ; :
-vnoremap : ;
-
-" Turn off search highlight
-nnoremap <leader>h :nohlsearch<CR>
-
 " Stamp words - Change word with (paste) value from register
 nnoremap S diw"0P
 
 " Bind R to grep word under cursor
 nnoremap R :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-" Add FZF to vim runtimepath
-set rtp+=/usr/local/opt/fzf
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -273,59 +257,74 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+" Nvim terminal
+autocmd BufWinEnter,WinEnter term://* startinsert
+tnoremap <Esc> <C-\><C-n>
+tnoremap jj <C-\><C-n>
+tnoremap <C-h> <C-\><C-n><C-w>h
+tnoremap <C-j> <C-\><C-n><C-w>j
+tnoremap <C-k> <C-\><C-n><C-w>k
+tnoremap <C-l> <C-\><C-n><C-w>l
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Shortcuts                                      "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>r :so $MYVIMRC<CR>
+nnoremap <Leader>r :source $MYVIMRC<CR>
+nnoremap <Leader>v :sp $MYVIMRC<CR>
+nnoremap <Leader>t :sp term://fish<CR>
+nnoremap <leader>h :nohlsearch<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
-autocmd FileType c nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<cr>
 nnoremap <Leader>x :YcmCompleter FixIt<CR>
 nnoremap <Leader>y :YcmDiags<CR>
-nnoremap <Leader>e :Lexplore<CR>
-nnoremap <Leader>d :Goyo<CR>
-nnoremap <Leader>u :UndotreeToggle<CR>
-nnoremap <Leader>w :GitSessionSave<cr>
 nnoremap <Leader>m :Neomake!<CR>
 nnoremap <Leader>n :Neomake<CR>
 nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>s :RipGrep<CR>
 nnoremap <Leader>f :FZF<CR>
+nnoremap <Leader>e :Lexplore<CR>
+nnoremap <Leader>u :UndotreeToggle<CR>
+nnoremap <Leader>d :Goyo<CR>
+nnoremap <Leader>w :GitSessionSave<cr>
+nnoremap <Leader>z 1z=
+nnoremap <Leader>gs :Gstatus<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf = '~/.config/nvim/cfg/ycm_extra_conf.py'
-
-" Place vim sessions in neovim directory
-"let g:gitsessions_dir = '~/.config/nvim/sessions'
-
 " Run Neomake linter when opening or saving buffers
 autocmd BufWritePost,BufEnter * Neomake
 
-" Don't fall back to the vim indent file for Autformat
-let g:autoformat_autoindent=0
+" Autoformat buffer on write
+autocmd BufWritePost * :Autoformat
+let g:autoformat_autoindent = 0
 
-" FZF
-let $FZF_DEFAULT_COMMAND = 'rg --vimgrep ""'
-let g:fzf_layout={ 'down': '20%' }
+" YCM replacement for Ctags in C files
+autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
+
+" YouCompleteMe global C++ compilation flags
+let g:ycm_global_ycm_extra_conf                    = '~/.config/nvim/cfg/ycm_extra_conf.py'
+
+" Place vim sessions in neovim directory
+let g:gitsessions_dir                              = '~/.config/nvim/sessions'
+
+" File explorer tree mode
+let g:netrw_liststyle                              = 3
+let g:netrw_list_hide                              = netrw_gitignore#Hide()
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger       ="<c-tab>"
-let g:UltiSnipsJumpForwardTrigger  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-let g:UltiSnipsSnippetDirectories=["cfg"]
+let g:UltiSnipsExpandTrigger                       = "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger                  = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger                 = "<s-tab>"
+let g:UltiSnipsSnippetDirectories                  = ["cfg"]
 
 " Airline
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#show_buffers=1
-let g:airline#extensions#tabline#buffer_min_count=2
-let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled           = 1
+let g:airline#extensions#tabline#show_buffers      = 1
+let g:airline#extensions#tabline#buffer_min_count  = 2
+let g:airline_powerline_fonts                      = 1
 
-" LatexBox
-let g:LatexBox_quickfix=3
-let g:LatexBox_autojump=1
-let g:LatexBox_show_warnings=0
+" Allow JSX in normal JS files
+let g:jsx_ext_required = 0
 
-"" Temporary workarounds
-" Allow Neovim to move left on <C-h>
-nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
+" Ultisnips change expandtrigger to not conflict with YCM
+let g:UltiSnipsExpandTrigger="<c-j>"
