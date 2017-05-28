@@ -28,6 +28,18 @@
 *.sql
 *.sqlite
 
+# Latex help files #
+####################
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.toc
+*.dvi
+
 # OS generated files #
 ######################
 .DS_Store
