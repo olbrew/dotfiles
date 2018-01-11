@@ -75,12 +75,6 @@ inoremap jj <ESC>
 " Reload config in vim
 nnoremap <Leader>r :so $MYVIMRC<CR>
 
-" Switch ':' with ';' for faster commands (without <S>)
-nnoremap ; :
-nnoremap : ;
-vnoremap ; :
-vnoremap : ;
-
 " Faster buffer switching
 nnoremap J :bprevious<CR>
 nnoremap K :bnext<CR>

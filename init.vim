@@ -5,40 +5,30 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                                  Plugins                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Automatically install vim-plug if not yet present when opening init.vim
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter init.vim PlugInstall --sync | source $MYVIMRC
-endif
 
 call plug#begin()
-Plug 'Valloric/YouCompleteMe'                        " Autocomplete support
-Plug 'neomake/neomake'                               " Asynchronous make & syntax checking
-Plug 'Chiel92/vim-autoformat'                        " Autoformatting
-Plug 'tpope/vim-repeat'                              " Repeat with . for plugins
-Plug 'tpope/vim-fugitive'                            " Git wrapper
-Plug 'tpope/vim-vinegar'                             " Netrw improved
-Plug 'tpope/vim-surround'                            " Quoting/parenthesizing made simple
-Plug 'wting/gitsessions.vim'                         " Improved vim session management
-Plug 'lifepillar/vim-solarized8'                     " Solarized colorscheme
-Plug 'Raimondi/delimitMate'                          " Auto match parentheses,...
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'  " FZF integration
-Plug 'christoomey/vim-tmux-navigator'                " Consistent vim, tmux window mappings
-Plug 'airblade/vim-gitgutter'                        " Git diff in gutter
-Plug 'easymotion/vim-easymotion'                     " Faster vim motions
-Plug 'critiqjo/lldb.nvim'                            " LLDB integration
-Plug 'Valloric/ListToggle'                           " Quickfix and locationlist toggle
-Plug 'pangloss/vim-javascript'                       " Javascript syntax and indentation
-Plug 'mxw/vim-jsx'                                   " JSX highlighting
-Plug 'StanAngeloff/php.vim'                          " PHP improved hightlighting
-Plug 'kassio/neoterm'                                " Wrapper for neovim terminal
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }   " Visual undo-tree
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }           " Distraction free mode
-Plug 'ryanss/vim-hackernews', { 'on': 'HackerNews' } " HackerNews in vim
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'  " Built-in snippet defaults
+Plug 'Valloric/YouCompleteMe'                       " Autocomplete support
+Plug 'neomake/neomake'                              " Asynchronous make & syntax checking
+Plug 'Chiel92/vim-autoformat'                       " Autoformatting
+Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
+Plug 'tpope/vim-fugitive'                           " Git wrapper
+Plug 'tpope/vim-vinegar'                            " Netrw improved
+Plug 'tpope/vim-surround'                           " Quoting/parenthesizing made simple
+Plug 'junegunn/vim-easy-align'                      " Align things
+Plug 'romainl/flattened'                            " Solarized colorscheme
+Plug 'Raimondi/delimitMate'                         " Auto match parentheses,...
+Plug 'christoomey/vim-tmux-navigator'               " Consistent vim-tmux window mappings
+Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
+Plug 'brooth/far.vim'                               " Project-wide find and Replace
+Plug 'easymotion/vim-easymotion'                    " Faster vim motions
+Plug 'Valloric/ListToggle'                          " Quickfix and locationlist toggle
+Plug 'kassio/neoterm'                               " Wrapper for neovim terminal
+Plug 'mbbill/undotree'                              " Visual undo-tree
+Plug 'junegunn/goyo.vim'                            " Distraction free mode
+Plug 'ryanss/vim-hackernews'                        " HackerNews in vim
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Built-in snippet defaults
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
-Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] } " Align things
 call plug#end()
 
 " Automatically install missing plugins when opening init.vim
@@ -58,7 +48,7 @@ let maplocalleader = ' '
 "set termguicolors
 
 " Solarized colorscheme
-colorscheme solarized8_dark_flat
+colorscheme flattened_dark
 
 " Set background for colors
 set background=dark
@@ -138,9 +128,6 @@ let g:tex_flavor = 'latex'
 " Recognize HTML in PHP code
 let php_htmlInStrings = 1
 
-autocmd FileType tex BufWritePre !Latexmk -pdflua %
-autocmd FileType tex VimLeavePre !Latexmk -c
-
 " Enable spell checking for prose
 autocmd FileType tex setlocal spell spelllang=en,nl
 autocmd FileType text setlocal spell spelllang=en,nl
@@ -218,11 +205,11 @@ inoremap <return> <C-R>=Ulti_ExpandOrEnter()<CR>
 " Remap escape
 inoremap jj <ESC>
 
-" Switch ':' with ';' for faster commands (without <S>)
-nnoremap ; :
-nnoremap : ;
-vnoremap ; :
-vnoremap : ;
+" switch ':' with ';' for faster commands (without <s>)
+"nnoremap ; :
+"nnoremap : ;
+"vnoremap ; :
+"vnoremap : ;
 
 " Unmap Ex mode
 map Q <Nop>
@@ -291,40 +278,44 @@ nnoremap <Leader>gs :Gstatus<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Plugin config                                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Run Neomake linter when opening or saving buffers
-autocmd BufWritePost,BufEnter * Neomake
-
-" Autoformat buffer on write
-autocmd BufWritePost * :Autoformat
-let g:autoformat_autoindent = 0
+" Run Neomake when reading a buffer (after 1s), and when writing
+call neomake#configure#automake('rw', 1000)
+let g:neomake_markdown_enabled_makers   = ['proselint']
+let g:neomake_text_enabled_markers      = ['proselint']
+let g:neomake_tex_enabled_markers       = ['proselint']
+let g:neomake_gitcommit_enabled_markers = ['proselint']
 
 " YCM replacement for Ctags in C files
 autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
 
+" Autoformat buffer on write
+autocmd BufWritePost * :Autoformat
+let g:autoformat_autoindent                       = 0
+
 " YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf                    = '~/.config/nvim/cfg/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf                   = '~/.config/nvim/cfg/ycm_extra_conf.py'
 
 " Place vim sessions in neovim directory
-let g:gitsessions_dir                              = '~/.config/nvim/sessions'
+let g:gitsessions_dir                             = '~/.config/nvim/sessions'
 
 " File explorer tree mode
-let g:netrw_liststyle                              = 3
-let g:netrw_list_hide                              = netrw_gitignore#Hide()
+let g:netrw_liststyle                             = 3
+let g:netrw_list_hide                             = netrw_gitignore#Hide()
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger                       = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger                  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger                 = "<s-tab>"
-let g:UltiSnipsSnippetDirectories                  = ["cfg"]
+let g:UltiSnipsExpandTrigger                      = "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger                 = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger                = "<s-tab>"
+let g:UltiSnipsSnippetDirectories                 = ["cfg"]
 
 " Airline
-let g:airline#extensions#tabline#enabled           = 1
-let g:airline#extensions#tabline#show_buffers      = 1
-let g:airline#extensions#tabline#buffer_min_count  = 2
-let g:airline_powerline_fonts                      = 1
+let g:airline#extensions#tabline#enabled          = 1
+let g:airline#extensions#tabline#show_buffers     = 1
+let g:airline#extensions#tabline#buffer_min_count = 2
+let g:airline_powerline_fonts                     = 1
 
 " Allow JSX in normal JS files
-let g:jsx_ext_required = 0
+let g:jsx_ext_required                            = 0
 
 " Ultisnips change expandtrigger to not conflict with YCM
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsExpandTrigger                      = "<c-j>"

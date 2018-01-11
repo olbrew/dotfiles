@@ -1,6 +1,0 @@
-[dotfiles]
-repository = ~/Code/system/dotfiles
-ignore = [
-    '.git',
-    '.gitignore',
-    '*.swp']

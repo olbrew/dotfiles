@@ -4,13 +4,19 @@
 [credential]
     helper = osxkeychain
 [core]
-    editor = nvim
+    editor = vim
     excludesfile = ~/.gitignore_global
     pager = less -R
 [stash]
     showPatch = true
 [log]
     decorate = full
+[gpg]
+	program = /usr/local/bin/krgpg
+[commit]
+	gpgSign = true
+[tag]
+	forceSignAnnotated = true
 [push]
     default = simple
     followTags = true
@@ -23,6 +29,5 @@
     pl = pull
     ps = push
     l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    lg = log
     co = checkout
     prune = fetch --prune
