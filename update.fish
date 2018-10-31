@@ -8,12 +8,7 @@ function update -d "Update all tools and applications om MacOS"
         brew update
         brew upgrade
         brew cleanup
-        brew cask cleanup
         brew prune
-        echo \n
-
-        echo "🆕  Updating Fisher"
-        fisher up
         echo \n
 
         echo "🆕  Updating Python"
@@ -32,7 +27,7 @@ function update -d "Update all tools and applications om MacOS"
         echo "🆕  Updating TLDR"
         tldr --update
         echo \n
-        
+
         echo "🆕  Updating Yarn"
         yarn global upgrade
         echo \n

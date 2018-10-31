@@ -9,13 +9,14 @@
 call plug#begin()
 Plug 'Valloric/YouCompleteMe'                       " Autocomplete support
 Plug 'neomake/neomake'                              " Asynchronous make & syntax checking
-Plug 'Chiel92/vim-autoformat'                       " Autoformatting
+Plug 'w0rp/ale'                                     " Asynchronous linting/fixing
 Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
 Plug 'tpope/vim-fugitive'                           " Git wrapper
 Plug 'tpope/vim-vinegar'                            " Netrw improved
 Plug 'tpope/vim-surround'                           " Quoting/parenthesizing made simple
 Plug 'junegunn/vim-easy-align'                      " Align things
 Plug 'romainl/flattened'                            " Solarized colorscheme
+Plug 'mhartington/oceanic-next'                     " Oceanic-next colorscheme
 Plug 'Raimondi/delimitMate'                         " Auto match parentheses,...
 Plug 'christoomey/vim-tmux-navigator'               " Consistent vim-tmux window mappings
 Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
@@ -25,7 +26,7 @@ Plug 'Valloric/ListToggle'                          " Quickfix and locationlist 
 Plug 'kassio/neoterm'                               " Wrapper for neovim terminal
 Plug 'mbbill/undotree'                              " Visual undo-tree
 Plug 'junegunn/goyo.vim'                            " Distraction free mode
-Plug 'ryanss/vim-hackernews'                        " HackerNews in vim
+Plug 'dansomething/vim-hackernews'                  " HackerNews in vim
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Built-in snippet defaults
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
@@ -67,7 +68,6 @@ let &wildignore = join(map(split(substitute(substitute(
 
 " Better scrolling behaviour
 set scrolloff=5
-set sidescroll=1
 
 " Tab space settings
 set smartindent
@@ -100,8 +100,8 @@ set showmatch
 set incsearch
 
 " Textwrapping
-set wrap
-set textwidth=80
+"set wrap
+"set textwidth=80
 let &showbreak='↪  '
 set linebreak
 set breakindent
@@ -288,9 +288,9 @@ let g:neomake_gitcommit_enabled_markers = ['proselint']
 " YCM replacement for Ctags in C files
 autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
 
-" Autoformat buffer on write
-autocmd BufWritePost * :Autoformat
-let g:autoformat_autoindent                       = 0
+" Ale linter, fixer and formatter
+let g:ale_fixers = {'javascript': ['prettier'], 'markdown': ['prettier']}
+let g:ale_fix_on_save = 1
 
 " YouCompleteMe global C++ compilation flags
 let g:ycm_global_ycm_extra_conf                   = '~/.config/nvim/cfg/ycm_extra_conf.py'

@@ -22,6 +22,7 @@ if status --is-interactive
     abbr --add whip 'dig TXT +short o-o.myaddr.l.google.com @ns1.google.com'
     abbr --add rg 'rg -pS'
     abbr --add wt 'webtorrent --blocklist "http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" --iina download'
+    abbr --add cat 'bat --theme=zenburn'
 end
 
 ## Environment variables
@@ -35,5 +36,7 @@ set -x COPYFILE_DISABLE 'true'
 set -x HOMEBREW_NO_INSECURE_REDIRECT 'true'
 # disable homebrew analytics
 set -x HOMEBREW_NO_ANALYTICS 1
+# Use rg as default command for fzf
+set -x FZF_DEFAULT_COMMAND 'rg --files --hidden --smart-case --glob "!.git/*"'
 # Kryptco
 set -x GPG_TTY (tty)
