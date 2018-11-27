@@ -1,10 +1,10 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                Vim configuration                             "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                   Vim configuration                      "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  Plugins                                     "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                        Plugins                           "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
 Plug 'Valloric/YouCompleteMe'                       " Autocomplete support
@@ -15,11 +15,11 @@ Plug 'tpope/vim-fugitive'                           " Git wrapper
 Plug 'tpope/vim-vinegar'                            " Netrw improved
 Plug 'tpope/vim-surround'                           " Quoting/parenthesizing made simple
 Plug 'junegunn/vim-easy-align'                      " Align things
-Plug 'romainl/flattened'                            " Solarized colorscheme
-Plug 'mhartington/oceanic-next'                     " Oceanic-next colorscheme
+Plug 'kaicataldo/material.vim'                      " Material color scheme
 Plug 'Raimondi/delimitMate'                         " Auto match parentheses,...
 Plug 'christoomey/vim-tmux-navigator'               " Consistent vim-tmux window mappings
 Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
+Plug 'vim-airline/vim-airline'                      " Fancy statusline
 Plug 'brooth/far.vim'                               " Project-wide find and Replace
 Plug 'easymotion/vim-easymotion'                    " Faster vim motions
 Plug 'Valloric/ListToggle'                          " Quickfix and locationlist toggle
@@ -29,7 +29,6 @@ Plug 'junegunn/goyo.vim'                            " Distraction free mode
 Plug 'dansomething/vim-hackernews'                  " HackerNews in vim
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Built-in snippet defaults
-Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' " Fancy statusline
 call plug#end()
 
 " Automatically install missing plugins when opening init.vim
@@ -38,18 +37,22 @@ autocmd VimEnter init.vim
             \|   PlugInstall --sync | q
             \| endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                  General                                     "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                        General                           "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set leader
 let mapleader      = ' '
 let maplocalleader = ' '
 
 " Enable True Color
+" Terminal.app doesn't yet support True color
 "set termguicolors
 
-" Solarized colorscheme
-colorscheme flattened_dark
+" Theme
+colorscheme material
+let g:material_theme_style = 'palenight'
+let g:material_terminal_italics = 1
+let g:airline_theme = 'material'
 
 " Set background for colors
 set background=dark
@@ -158,9 +161,9 @@ endif
 set undofile
 set undodir=$HOME/.config/nvim/undo
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Functions                                      "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                     Functions                            "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Automatically remove trailing whitespaces
 function! TrimWhiteSpace()
     %s/\s\+$//e
@@ -199,9 +202,9 @@ endfunction
 " Set <space> as primary trigger
 inoremap <return> <C-R>=Ulti_ExpandOrEnter()<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                                Maps                                          "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                      Maps                                "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remap escape
 inoremap jj <ESC>
 
@@ -253,9 +256,9 @@ tnoremap <C-j> <C-\><C-n><C-w>j
 tnoremap <C-k> <C-\><C-n><C-w>k
 tnoremap <C-l> <C-\><C-n><C-w>l
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Shortcuts                                      "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                     Shortcuts                            "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>r :source $MYVIMRC<CR>
 nnoremap <Leader>v :sp $MYVIMRC<CR>
 nnoremap <Leader>t :sp term://fish<CR>
@@ -275,9 +278,9 @@ nnoremap <Leader>w :GitSessionSave<cr>
 nnoremap <Leader>z 1z=
 nnoremap <Leader>gs :Gstatus<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Plugin config                                  "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                     Plugin config                        "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Run Neomake when reading a buffer (after 1s), and when writing
 call neomake#configure#automake('rw', 1000)
 let g:neomake_markdown_enabled_makers   = ['proselint']

@@ -1,12 +1,14 @@
 [user]
     name = olbrew
     email = olbrew@users.noreply.github.com
+[includeIf "gitdir:~/Developer/lemon/"]
+    path = ~/Developer/lemon/.gitconfig
 [credential]
     helper = osxkeychain
 [core]
-    editor = vim
+    editor = nvim
     excludesfile = ~/.gitignore_global
-    pager = less -R
+    pager = bat
 [stash]
     showPatch = true
 [log]

@@ -12,8 +12,7 @@ function update -d "Update all tools and applications om MacOS"
         echo \n
 
         echo "🆕  Updating Python"
-        pip3 list --outdated --local | awk '{print $1;}' | xargs -n1 pip3 install -U
-        pip2 list --outdated --local | awk '{print $1;}' | xargs -n1 pip2 install -U
+        pip list --outdated --local | awk '{print $1;}' | xargs -n1 pip install -U
         echo \n
 
         echo "🆕  Updating Vim"
