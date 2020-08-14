@@ -7,6 +7,7 @@ function update -d "Update all tools and applications om MacOS"
         echo "🍺 Updating Brew"
         brew update
         brew upgrade
+        brew cask upgrade
         brew cleanup
         echo \n
 

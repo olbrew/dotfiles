@@ -1,6 +1,6 @@
 [user]
     name = olbrew
-    email = olbrew@users.noreply.github.com
+	email = olivierbrewaeys@gmail.com
 [includeIf "gitdir:~/Developer/lemon/"]
     path = ~/Developer/lemon/.gitconfig
 [credential]
@@ -33,3 +33,5 @@
     l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     co = checkout
     prune = fetch --prune
+[pull]
+	rebase = false

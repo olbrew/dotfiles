@@ -6,26 +6,29 @@ fish_vi_key_bindings
 
 ## Abbreviations
 if status --is-interactive
-    set -g fish_user_abbreviations
-    abbr --add c clear
-    abbr --add g git
-    abbr --add b brew
-    abbr --add ls 'exa -lha --sort=modified --git'
-    abbr --add l 'exa -1 --sort=modified'
-    abbr --add q 'clear; exit'
-    abbr --add log 'tail /var/log/system.log'
-    abbr --add src 'source ~/.config/fish/config.fish'
-    abbr --add c++ 'clang++ -std=c++14 -Wall -Wextra'
-    abbr --add yt 'youtube-dl -o "~/Downloads/%(title)s.%(ext)s"'
-    abbr --add hn 'nvim -c HackerNews'
-    abbr --add bc 'brew cask'
-    abbr --add whip 'dig TXT +short o-o.myaddr.l.google.com @ns1.google.com'
-    abbr --add rg 'rg -pS'
-    abbr --add wt 'webtorrent --blocklist "http://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" --iina download'
-    abbr --add cat 'bat --theme=zenburn'
+    abbr --add --global c clear
+    abbr --add --global g git
+    abbr --add --global o 'open .'
+    abbr --add --global b brew
+    abbr --add --global ls 'exa -lh --sort=modified --git'
+    abbr --add --global la 'exa -lha --sort=modified --git'
+    abbr --add --global q 'clear; exit'
+    abbr --add --global cat 'bat --theme=zenburn'
+    abbr --add --global log 'tail /var/log/system.log'
+    abbr --add --global src 'source ~/.config/fish/config.fish'
+    abbr --add --global c++ 'clang++ -std=c++14 -Wall -Wextra'
+    abbr --add --global yt 'youtube-dl -o "~/Downloads/%(title)s.%(ext)s"'
+    abbr --add --global hn 'nvim -c HackerNews'
+    abbr --add --global bc 'brew cask'
+    abbr --add --global whip 'dig TXT +short o-o.myaddr.l.google.com @ns1.google.com'
+    abbr --add --global rg 'rg -pS -M 200'
+    abbr --add --global tmux 'tmux -f ~/.config/tmux/tmux.conf'
+    abbr --add --global wt 'webtorrent --blocklist "https://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" -o ~/Downloads/ download'
 end
 
 ## Environment variables
+# Set locale
+set -x LC_ALL 'en_US.UTF-8'
 # Editor
 set -x EDITOR 'nvim'
 # Compilation flags
