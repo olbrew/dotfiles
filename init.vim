@@ -290,6 +290,7 @@ autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
 
 " Format Python code with Black
 "autocmd BufWritePre *.py execute ':Black'
+autocmd BufWritePre *.py execute ':Black'
 
 " Ale linter, fixer and formatter
 let g:ale_fixers = {
