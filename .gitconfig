@@ -1,0 +1,43 @@
+[user]
+    name = olbrew
+    email = olivierbrewaeys@gmail.com
+[credential]
+    helper = osxkeychain
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+    pager = delta
+[pull]
+    rebase = false
+[stash]
+    showPatch = true
+[log]
+    decorate = full
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    features = side-by-side line-numbers
+[gpg]
+    program = /usr/local/bin/krgpg
+[commit]
+    gpgSign = true
+[tag]
+    forceSignAnnotated = true
+[push]
+    default = simple
+    followTags = true
+[alias]
+    s = status
+    a = add
+    c = commit
+    cm = commit -m
+    d = diff
+    pl = pull
+    ps = push
+    l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    co = checkout
+    prune = fetch --prune
+[gpg]
+    program = /usr/local/bin/krgpg
+[commit]
+    gpgSign = true

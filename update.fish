@@ -7,11 +7,16 @@ function update -d "Update all tools and applications om MacOS"
         echo "🍺 Updating Brew"
         brew update
         brew upgrade
+        brew upgrade --cask
         brew cleanup
         echo \n
 
+        #echo "💎 Updating Ruby Gems"
+        #sudo gem update -- --with-openssl-dir=/usr/local/Cellar/openssl@1.1/1.1.1k
+        #echo \n
+
         #echo "🐍 Updating Python"
-        #pip list --outdated --local | awk '{print $1;}' | xargs -n1 pip install -U
+        #pip3 list --outdated --local | awk '{print $1;}' | xargs -n1 pip3 install -U
         #echo \n
 
         echo "✏️  Updating NeoVim"
@@ -22,12 +27,12 @@ function update -d "Update all tools and applications om MacOS"
         tldr --update
         echo \n
 
-        echo "🧶 Updating Yarn"
-        yarn global upgrade
-        echo \n
+        #echo "🧶 Updating NPM"
+        #yarn global upgrade
+        #echo \n
 
         echo "🐡 Updating Fish Completions"
-        fish_update_completions
+        fish_update_completions --keep
         echo \n
 
         echo "📂 Cleaning stale directories from z cache"

@@ -7,19 +7,22 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call plug#begin()
-Plug 'Valloric/YouCompleteMe'                       " Autocomplete support
-Plug 'neomake/neomake'                              " Asynchronous make & syntax checking
-Plug 'w0rp/ale'                                     " Asynchronous linting/fixing
+"Plug 'zxqfl/tabnine-vim'                            " Tabnine autocompletion
+Plug 'dense-analysis/ale'                           " Syntax checker and linter
+Plug 'psf/black', { 'branch': 'stable' }            " Python formatter (no ALE support yet)
+Plug 'Chiel92/vim-autoformat'                       " Autoformatter
+Plug 'sheerun/vim-polyglot'                         " Language pack
 Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
 Plug 'tpope/vim-fugitive'                           " Git wrapper
 Plug 'tpope/vim-vinegar'                            " Netrw improved
 Plug 'tpope/vim-surround'                           " Quoting/parenthesizing made simple
 Plug 'junegunn/vim-easy-align'                      " Align things
-Plug 'kaicataldo/material.vim'                      " Material color scheme
+Plug 'nathanaelkane/vim-indent-guides'              " Indentation guides
+Plug 'bkad/CamelCaseMotion'                         " Vim motions for camelcase and underscore notation
+Plug 'joshdick/onedark.vim'                         " Onedark color scheme
 Plug 'Raimondi/delimitMate'                         " Auto match parentheses,...
 Plug 'christoomey/vim-tmux-navigator'               " Consistent vim-tmux window mappings
 Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
-Plug 'vim-airline/vim-airline'                      " Fancy statusline
 Plug 'brooth/far.vim'                               " Project-wide find and Replace
 Plug 'easymotion/vim-easymotion'                    " Faster vim motions
 Plug 'Valloric/ListToggle'                          " Quickfix and locationlist toggle
@@ -46,13 +49,10 @@ let maplocalleader = ' '
 
 " Enable True Color
 " Terminal.app doesn't yet support True color
-"set termguicolors
+set termguicolors
 
 " Theme
-colorscheme material
-let g:material_theme_style = 'palenight'
-let g:material_terminal_italics = 1
-let g:airline_theme = 'material'
+colorscheme onedark
 
 " Set background for colors
 set background=dark
@@ -100,10 +100,9 @@ set autowrite
 set ignorecase
 set smartcase
 set showmatch
-set incsearch
 
 " Textwrapping
-"set wrap
+set wrap
 "set textwidth=80
 let &showbreak='↪  '
 set linebreak
@@ -159,7 +158,12 @@ endif
 
 " Persistent undo
 set undofile
-set undodir=$HOME/.config/nvim/undo
+
+" Automatically edit scratch file when not editing another file
+autocmd VimEnter * if argc() == 0 | edit ~/Library/Mobile Documents/iCloud~co~fluder~fsnotes/Documents/scratch.md | endif
+
+" Execute current Python script
+autocmd Filetype python nnoremap <buffer> <leader>p :w<CR>:split term://python %<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     Functions                            "
@@ -266,37 +270,51 @@ nnoremap <leader>h :nohlsearch<CR>
 nnoremap <Leader>g :YcmCompleter GoTo<CR>
 nnoremap <Leader>x :YcmCompleter FixIt<CR>
 nnoremap <Leader>y :YcmDiags<CR>
-nnoremap <Leader>m :Neomake!<CR>
-nnoremap <Leader>n :Neomake<CR>
+nnoremap <Leader>m :ALEFix<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>s :RipGrep<CR>
 nnoremap <Leader>f :FZF<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>u :UndotreeToggle<CR>
 nnoremap <Leader>d :Goyo<CR>
-nnoremap <Leader>w :GitSessionSave<cr>
 nnoremap <Leader>z 1z=
+nnoremap <leader>w :let b:ale_fix_on_save=0<CR>:w<CR>
 nnoremap <Leader>gs :Gstatus<CR>
+noremap <Leader>af :Autoformat<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     Plugin config                        "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Run Neomake when reading a buffer (after 1s), and when writing
-call neomake#configure#automake('rw', 1000)
-let g:neomake_markdown_enabled_makers   = ['proselint']
-let g:neomake_text_enabled_markers      = ['proselint']
-let g:neomake_tex_enabled_markers       = ['proselint']
-let g:neomake_gitcommit_enabled_markers = ['proselint']
-
 " YCM replacement for Ctags in C files
 autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
 
-" Ale linter, fixer and formatter
-let g:ale_fixers = {'javascript': ['prettier'], 'markdown': ['prettier']}
-let g:ale_fix_on_save = 1
+" Format Python code with Black
+"autocmd BufWritePre *.py execute ':Black'
 
-" YouCompleteMe global C++ compilation flags
-let g:ycm_global_ycm_extra_conf                   = '~/.config/nvim/cfg/ycm_extra_conf.py'
+" Ale linter, fixer and formatter
+let g:ale_fixers = {
+            \'*': ['remove_trailing_lines', 'trim_whitespace'],
+            \'javascript': ['prettier'],
+            \'html': ['prettier'],
+            \'css': ['prettier'],
+            \'markdown': ['prettier', 'proselint'],
+            \'text': ['proselint'],
+            \'tex': ['proselint'],
+            \'gitcommit': ['proselint'],
+            \}
+let g:ale_fix_on_save = 1
+let g:ale_lint_on_enter = 0
+
+" Enabel CamelCaseMotion with default mappings
+let g:camelcasemotion_key = '<leader>'
+map <silent> w <Plug>CamelCaseMotion_w
+map <silent> b <Plug>CamelCaseMotion_b
+map <silent> e <Plug>CamelCaseMotion_e
+map <silent> ge <Plug>CamelCaseMotion_ge
+sunmap w
+sunmap b
+sunmap e
+sunmap ge
 
 " Place vim sessions in neovim directory
 let g:gitsessions_dir                             = '~/.config/nvim/sessions'
@@ -304,6 +322,7 @@ let g:gitsessions_dir                             = '~/.config/nvim/sessions'
 " File explorer tree mode
 let g:netrw_liststyle                             = 3
 let g:netrw_list_hide                             = netrw_gitignore#Hide()
+let g:netrw_dirhistmax                            = 0
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger                      = "<c-tab>"
@@ -311,11 +330,6 @@ let g:UltiSnipsJumpForwardTrigger                 = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger                = "<s-tab>"
 let g:UltiSnipsSnippetDirectories                 = ["cfg"]
 
-" Airline
-let g:airline#extensions#tabline#enabled          = 1
-let g:airline#extensions#tabline#show_buffers     = 1
-let g:airline#extensions#tabline#buffer_min_count = 2
-let g:airline_powerline_fonts                     = 1
 
 " Allow JSX in normal JS files
 let g:jsx_ext_required                            = 0
