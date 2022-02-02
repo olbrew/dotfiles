@@ -6,11 +6,24 @@
 "                        Plugins                           "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Automatically install vim-plug when opening init.vim
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs
+              \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter init.vim PlugInstall --sync | source $MYVIMRC
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter init.vim if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin()
-"Plug 'zxqfl/tabnine-vim'                            " Tabnine autocompletion
-Plug 'dense-analysis/ale'                           " Syntax checker and linter
-Plug 'psf/black', { 'branch': 'stable' }            " Python formatter (no ALE support yet)
-Plug 'Chiel92/vim-autoformat'                       " Autoformatter
+Plug 'neovim/nvim-lspconfig'                        " Neovim LanguageServerProtocol configurations
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'lukas-reineke/indent-blankline.nvim'          " Indentation guides
+"Plug 'github/copilot.vim'                           " Github Copilot (Still in beta)
 Plug 'sheerun/vim-polyglot'                         " Language pack
 Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
 Plug 'tpope/vim-fugitive'                           " Git wrapper
@@ -19,7 +32,7 @@ Plug 'tpope/vim-surround'                           " Quoting/parenthesizing mad
 Plug 'junegunn/vim-easy-align'                      " Align things
 Plug 'nathanaelkane/vim-indent-guides'              " Indentation guides
 Plug 'bkad/CamelCaseMotion'                         " Vim motions for camelcase and underscore notation
-Plug 'joshdick/onedark.vim'                         " Onedark color scheme
+Plug 'rmehri01/onenord.nvim'                        " OneNord color scheme
 Plug 'Raimondi/delimitMate'                         " Auto match parentheses,...
 Plug 'christoomey/vim-tmux-navigator'               " Consistent vim-tmux window mappings
 Plug 'airblade/vim-gitgutter'                       " Git diff in gutter
@@ -34,12 +47,6 @@ Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Built-in snippet defaults
 call plug#end()
 
-" Automatically install missing plugins when opening init.vim
-autocmd VimEnter init.vim
-            \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-            \|   PlugInstall --sync | q
-            \| endif
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                        General                           "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -52,7 +59,7 @@ let maplocalleader = ' '
 set termguicolors
 
 " Theme
-colorscheme onedark
+colorscheme onenord
 
 " Set background for colors
 set background=dark
@@ -85,6 +92,7 @@ set mouse=a
 " Decrease timeout for key sequences
 set ttimeout
 set ttimeoutlen=100
+set timeoutlen=500
 
 " Show line numbers
 set number
@@ -140,7 +148,7 @@ autocmd FileType gitcommit setlocal spell spelllang=en,nl
 set complete+=kspell
 
 " System clipboard functionality
-set clipboard+=unnamed
+set clipboard+=unnamedplus
 
 " Disable scratch preview window on autocomplete
 set completeopt-=preview
@@ -165,6 +173,12 @@ autocmd VimEnter * if argc() == 0 | edit ~/Library/Mobile Documents/iCloud~co~fl
 " Execute current Python script
 autocmd Filetype python nnoremap <buffer> <leader>p :w<CR>:split term://python %<CR>
 
+" Highlight yanked region
+augroup highlight_yank
+    autocmd!
+    au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=700}
+augroup END
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     Functions                            "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -173,24 +187,6 @@ function! TrimWhiteSpace()
     %s/\s\+$//e
 endfunction
 autocmd BufWritePre * call TrimWhiteSpace()
-
-" Helper functions to allow UltiSnips to work with YCM and <tab>s
-" Enable tabbing through list of results
-function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        if pumvisible()
-            return "\<C-n>"
-        else
-            call UltiSnips#JumpForwards()
-            if g:ulti_jump_forwards_res == 0
-                return "\<TAB>"
-            endif
-        endif
-    endif
-    return ""
-endfunction
-au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
 
 " Expand snippet or return
 let g:ulti_expand_res = 0
@@ -267,45 +263,18 @@ nnoremap <Leader>r :source $MYVIMRC<CR>
 nnoremap <Leader>v :sp $MYVIMRC<CR>
 nnoremap <Leader>t :sp term://fish<CR>
 nnoremap <leader>h :nohlsearch<CR>
-nnoremap <Leader>g :YcmCompleter GoTo<CR>
-nnoremap <Leader>x :YcmCompleter FixIt<CR>
-nnoremap <Leader>y :YcmDiags<CR>
-nnoremap <Leader>m :ALEFix<CR>
 nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>s :RipGrep<CR>
+nnoremap <Leader>s :Rg<CR>
 nnoremap <Leader>f :FZF<CR>
 nnoremap <Leader>e :Lexplore<CR>
 nnoremap <Leader>u :UndotreeToggle<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>z 1z=
-nnoremap <leader>w :let b:ale_fix_on_save=0<CR>:w<CR>
-nnoremap <Leader>gs :Gstatus<CR>
-noremap <Leader>af :Autoformat<CR>
+nnoremap <Leader>gs :Git<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     Plugin config                        "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" YCM replacement for Ctags in C files
-autocmd FileType c,cpp nnoremap <buffer> <silent> <C-]>: YcmCompleter GoTo<cr>
-
-" Format Python code with Black
-"autocmd BufWritePre *.py execute ':Black'
-autocmd BufWritePre *.py execute ':Black'
-
-" Ale linter, fixer and formatter
-let g:ale_fixers = {
-            \'*': ['remove_trailing_lines', 'trim_whitespace'],
-            \'javascript': ['prettier'],
-            \'html': ['prettier'],
-            \'css': ['prettier'],
-            \'markdown': ['prettier', 'proselint'],
-            \'text': ['proselint'],
-            \'tex': ['proselint'],
-            \'gitcommit': ['proselint'],
-            \}
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_enter = 0
-
 " Enabel CamelCaseMotion with default mappings
 let g:camelcasemotion_key = '<leader>'
 map <silent> w <Plug>CamelCaseMotion_w
@@ -326,6 +295,7 @@ let g:netrw_list_hide                             = netrw_gitignore#Hide()
 let g:netrw_dirhistmax                            = 0
 
 " Ultisnips
+let g:python3_host_prog                           = '/usr/local/bin/python3'
 let g:UltiSnipsExpandTrigger                      = "<c-tab>"
 let g:UltiSnipsJumpForwardTrigger                 = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger                = "<s-tab>"
@@ -335,5 +305,21 @@ let g:UltiSnipsSnippetDirectories                 = ["cfg"]
 " Allow JSX in normal JS files
 let g:jsx_ext_required                            = 0
 
-" Ultisnips change expandtrigger to not conflict with YCM
-let g:UltiSnipsExpandTrigger                      = "<c-j>"
+
+" Indent blankline
+lua <<EOF
+--vim.opt.list = true
+
+require("indent_blankline").setup {
+    space_char_blankline = " ",
+    show_current_context = true,
+    show_current_context_start = true,
+}
+EOF
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                  Language server setup                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+lua require('lspconfig').pylsp.setup{}
+lua require('lspconfig').html.setup{}
+
