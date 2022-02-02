@@ -99,7 +99,9 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: "JetBrains Mono"
+    #family: "JetBrains Mono"
+    family: "MesloLGS Nerd Font Mono"
+
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -267,35 +269,60 @@ font:
   #
   #indexed_colors: []
 
-# Colors (One Dark)
-# https://github.com/eendroroy/alacritty-theme/blob/master/themes/one_dark.yaml
+## OneNord
+# https://github.com/rmehri01/onenord.nvim/blob/main/extras/onenord.yaml
 colors:
   # Default colors
   primary:
-    background: '0x1e2127'
-    foreground: '0xabb2bf'
+    background: '0x2E3440'
+    foreground: '0xC8D0E0'
 
   # Normal colors
   normal:
-    black:   '0x1e2127'
-    red:     '0xe06c75'
-    green:   '0x98c379'
-    yellow:  '0xd19a66'
-    blue:    '0x61afef'
-    magenta: '0xc678dd'
-    cyan:    '0x56b6c2'
-    white:   '0xabb2bf'
+    black:   '0x3B4252'
+    red:     '0xBF616A'
+    green:   '0xA3BE8C'
+    yellow:  '0xEBCB8B'
+    blue:    '0x81A1C1'
+    magenta: '0xB988B0'
+    cyan:    '0x88C0D0'
+    white:   '0xE5E9F0'
 
   # Bright colors
   bright:
-    black:   '0x5c6370'
-    red:     '0xe06c75'
-    green:   '0x98c379'
-    yellow:  '0xd19a66'
-    blue:    '0x61afef'
-    magenta: '0xc678dd'
-    cyan:    '0x56b6c2'
-    white:   '0xffffff'
+    black:   '0x4C566A'
+    red:     '0xBF616A'
+    green:   '0xA3BE8C'
+    yellow:  '0xEBCB8B'
+    blue:    '0x81A1C1'
+    magenta: '0xB988B0'
+    cyan:    '0x8FBCBB'
+    white:   '0xECEFF4'
+
+  search:
+    matches:
+     foreground: '#81A1C1'
+     background: '#4C566A'
+    focused_match:
+     foreground: '#EBCB8B'
+     background: '#4C566A'
+
+    bar:
+     background: '#434C5E'
+     foreground: '#88C0D0'
+
+  hints:
+    start:
+     foreground: '#B988B0'
+     background: '#4C566A'
+
+    end:
+     foreground: '#81A1C1'
+     background: '#4C566A'
+
+  selection:
+   text: CellForeground
+   background: '#3F4758'
 
 # Bell
 #
@@ -612,7 +639,7 @@ colors:
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
-#key_bindings:
+key_bindings:
   #- { key: Paste,                                action: Paste          }
   #- { key: Copy,                                 action: Copy           }
   #- { key: L,         mods: Control,             action: ClearLogNotice }
@@ -704,6 +731,7 @@ colors:
   #- { key: F,      mods: Command|Control,    action: ToggleFullscreen }
   #- { key: F,      mods: Command,            action: SearchForward    }
   #- { key: B,      mods: Command,            action: SearchBackward   }
+   - { key: T,      mods: Command,            action: CreateNewWindow   }
 
 #debug:
   # Display the time it takes to redraw each frame.
