@@ -44,7 +44,6 @@ Plug 'mbbill/undotree'                              " Visual undo-tree
 Plug 'junegunn/goyo.vim'                            " Distraction free mode
 Plug 'dansomething/vim-hackernews'                  " HackerNews in vim
 Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " Built-in snippet defaults
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -168,7 +167,11 @@ endif
 set undofile
 
 " Automatically edit scratch file when not editing another file
-autocmd VimEnter * if argc() == 0 | edit ~/Library/Mobile Documents/iCloud~co~fluder~fsnotes/Documents/scratch.md | endif
+if has("mac")
+    autocmd VimEnter * if argc() == 0 | edit ~/Library/Mobile Documents/iCloud~co~fluder~fsnotes/Documents/scratch.md | endif
+elseif has("unix")
+    autocmd VimEnter * if argc() == 0 | edit ~/scratch.md | endif
+endif
 
 " Execute current Python script
 autocmd Filetype python nnoremap <buffer> <leader>p :w<CR>:split term://python %<CR>
@@ -187,20 +190,6 @@ function! TrimWhiteSpace()
     %s/\s\+$//e
 endfunction
 autocmd BufWritePre * call TrimWhiteSpace()
-
-" Expand snippet or return
-let g:ulti_expand_res = 0
-function! Ulti_ExpandOrEnter()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res
-        return ''
-    else
-        return "\<return>"
-    endif
-endfunction
-
-" Set <space> as primary trigger
-inoremap <return> <C-R>=Ulti_ExpandOrEnter()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                      Maps                                "
@@ -294,13 +283,12 @@ let g:netrw_liststyle                             = 3
 let g:netrw_list_hide                             = netrw_gitignore#Hide()
 let g:netrw_dirhistmax                            = 0
 
-" Ultisnips
-let g:python3_host_prog                           = '/usr/local/bin/python3'
-let g:UltiSnipsExpandTrigger                      = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger                 = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger                = "<s-tab>"
-let g:UltiSnipsSnippetDirectories                 = ["cfg"]
-
+" Set Python host
+if has("mac")
+    let g:python3_host_prog                       = '/usr/local/bin/python3'
+elseif has("unix")
+    let g:python3_host_prog                       = '/usr/bin/python3'
+endif
 
 " Allow JSX in normal JS files
 let g:jsx_ext_required                            = 0
