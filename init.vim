@@ -23,6 +23,8 @@ call plug#begin()
 Plug 'neovim/nvim-lspconfig'                        " Neovim LanguageServerProtocol configurations
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'lukas-reineke/indent-blankline.nvim'          " Indentation guides
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Install latest version of FZF, if not found
+Plug 'junegunn/fzf.vim'                             " FZF Git integration
 "Plug 'github/copilot.vim'                           " Github Copilot (Still in beta)
 Plug 'sheerun/vim-polyglot'                         " Language pack
 Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
@@ -43,7 +45,6 @@ Plug 'kassio/neoterm'                               " Wrapper for neovim termina
 Plug 'mbbill/undotree'                              " Visual undo-tree
 Plug 'junegunn/goyo.vim'                            " Distraction free mode
 Plug 'dansomething/vim-hackernews'                  " HackerNews in vim
-Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim' " FZF integration
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
