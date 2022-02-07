@@ -21,8 +21,11 @@ autocmd VimEnter init.vim if len(filter(values(g:plugs), '!isdirectory(v:val.dir
 
 call plug#begin()
 Plug 'neovim/nvim-lspconfig'                        " Neovim LanguageServerProtocol configurations
+Plug 'glepnir/lspsaga.nvim'                         " LSP commands
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'lukas-reineke/indent-blankline.nvim'          " Indentation guides
+Plug 'folke/which-key.nvim'                         " Key-completion suggestions
+Plug 'ojroques/vim-oscyank'                         " Copy text through SSH with OSC52
 "Plug 'github/copilot.vim'                           " Github Copilot (Still in beta)
 Plug 'sheerun/vim-polyglot'                         " Language pack
 Plug 'tpope/vim-repeat'                             " Repeat with . for plugins
@@ -260,6 +263,8 @@ nnoremap <Leader>u :UndotreeToggle<CR>
 nnoremap <Leader>d :Goyo<CR>
 nnoremap <Leader>z 1z=
 nnoremap <Leader>gs :Git<CR>
+vnoremap <leader>o :OSCYank<CR>
+nmap <leader>o <Plug>OSCYank
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                     Plugin config                        "
@@ -293,15 +298,23 @@ endif
 " Allow JSX in normal JS files
 let g:jsx_ext_required                            = 0
 
-
 " Indent blankline
 lua <<EOF
---vim.opt.list = true
-
 require("indent_blankline").setup {
     space_char_blankline = " ",
     show_current_context = true,
     show_current_context_start = true,
+}
+EOF
+
+" Whick-Key
+lua << EOF
+require("which-key").setup {
+    plugins = {
+        spelling = {
+            enabled = true
+        }
+    }
 }
 EOF
 
@@ -310,4 +323,3 @@ EOF
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 lua require('lspconfig').pylsp.setup{}
 lua require('lspconfig').html.setup{}
-
