@@ -17,6 +17,7 @@ fundle plugin 'jethrokuan/z'
 fundle plugin 'PatrickF1/fzf.fish'
 fundle plugin 'Gazorby/fish-abbreviation-tips'
 fundle plugin 'danhper/fish-fastdir'
+fundle plugin 'lilyball/nix-env.fish'
 
 fundle init
 
@@ -33,12 +34,15 @@ abbr --add --global src 'source ~/.config/fish/config.fish'
 abbr --add --global whip 'dig TXT +short o-o.myaddr.l.google.com @ns1.google.com'
 
 ## Environment variables
+### Set default user to hide hostname in prompt
+set -x DEFAULT_USER o
 ### Set locale
 set -x LC_ALL 'en_US.UTF-8'
 ### Editor
 set -x EDITOR 'nvim'
-### Use rg as default command for fzf
-set -x FZF_DEFAULT_COMMAND 'rg --files --hidden --smart-case --glob "!.git/*"'
+### Use fd as default command for fzf
+set -x FZF_DEFAULT_COMMAND 'fdfind --type file --follow --hidden --exclude .git'
+set -x FZF_CTRL_T_COMMAND '$FZF_DEFAULT_COMMAND'
 
 # Platform specific configuration
 switch (uname)
@@ -50,8 +54,6 @@ case Darwin ## Mac
     abbr --add --global wt 'webtorrent --blocklist "https://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" -o ~/Downloads/ download'
 
     ### Environment variables
-    #### Set default user to hide hostname in prompt
-    set -x DEFAULT_USER o
     #### Prevent ._* files from being written
     set -x COPYFILE_DISABLE 'true'
     #### No insecure redirect for homebrew
@@ -69,9 +71,7 @@ case Linux ## Linux
     abbr --add --global yt 'youtube-dl -o "/media/rpool/video/Short/%(title)s.%(ext)s"'
     abbr --add --global temp 'echo "RPI4 CPU temperature is" (expr (cat /sys/class/thermal/thermal_zone0/temp) / 1000) "degrees celcius"'
 
-    ### Environemnt variables
-    #### Set default user to hide hostname in prompt
-    set -x DEFAULT_USER ubuntu
+    ### Environment variables
 
     ### Byobu config
     status --is-login; and status --is-interactive; and exec byobu-launcher
