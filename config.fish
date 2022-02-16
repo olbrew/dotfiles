@@ -76,5 +76,5 @@ case Linux ## Linux
     set -x LOCALE_ARCHIVE '/usr/lib/locale/locale-archive'
 
     ### Byobu config
+    status --is-login; and status --is-interactive; and exec byobu-launcher
 end
-status --is-login; and status --is-interactive; and exec byobu-launcher
