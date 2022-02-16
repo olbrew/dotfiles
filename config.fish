@@ -18,6 +18,7 @@ fundle plugin 'PatrickF1/fzf.fish'
 fundle plugin 'Gazorby/fish-abbreviation-tips'
 fundle plugin 'danhper/fish-fastdir'
 fundle plugin 'lilyball/nix-env.fish'
+fundle plugin 'danhper/fish-ssh-agent'
 
 fundle init
 
@@ -26,6 +27,7 @@ abbr --add --global g git;
 abbr --add --global l 'exa'
 abbr --add --global ls 'exa -l --sort=modified'
 abbr --add --global la 'exa -la --sort=modified'
+abbr --add --global find 'fd'
 abbr --add --global cat 'bat'
 abbr --add --global less 'bat'
 abbr --add --global grep 'rg'
@@ -41,7 +43,7 @@ set -x LC_ALL 'en_US.UTF-8'
 ### Editor
 set -x EDITOR 'nvim'
 ### Use fd as default command for fzf
-set -x FZF_DEFAULT_COMMAND 'fdfind --type file --follow --hidden --exclude .git'
+set -x FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
 set -x FZF_CTRL_T_COMMAND '$FZF_DEFAULT_COMMAND'
 
 # Platform specific configuration
@@ -65,14 +67,14 @@ case Darwin ## Mac
 
 case Linux ## Linux
     ### Abbreviations
-    abbr --add --global bat 'batcat'
-    abbr --add --global fd 'fdfind'
     abbr --add --global log 'tail /var/log/syslog'
     abbr --add --global yt 'youtube-dl -o "/media/rpool/video/Short/%(title)s.%(ext)s"'
     abbr --add --global temp 'echo "RPI4 CPU temperature is" (expr (cat /sys/class/thermal/thermal_zone0/temp) / 1000) "degrees celcius"'
 
     ### Environment variables
+    #### Nix locale fix on non-NixOS
+    set -x LOCALE_ARCHIVE '/usr/lib/locale/locale-archive'
 
     ### Byobu config
-    status --is-login; and status --is-interactive; and exec byobu-launcher
 end
+status --is-login; and status --is-interactive; and exec byobu-launcher
