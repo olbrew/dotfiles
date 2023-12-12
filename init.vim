@@ -21,6 +21,7 @@ autocmd VimEnter init.vim if len(filter(values(g:plugs), '!isdirectory(v:val.dir
 
 call plug#begin()
 Plug 'neovim/nvim-lspconfig'                        " Neovim LanguageServerProtocol configurations
+Plug 'williamboman/nvim-lsp-installer'              " Manage LSP servers
 Plug 'glepnir/lspsaga.nvim'                         " LSP commands
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'lukas-reineke/indent-blankline.nvim'          " Indentation guides
@@ -322,5 +323,24 @@ EOF
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                  Language server setup                   "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-lua require('lspconfig').pylsp.setup{}
-lua require('lspconfig').html.setup{}
+" From README of `nvim-lsp-installer`
+" https://github.com/williamboman/nvim-lsp-installer/
+lua << EOF
+local lsp_installer = require("nvim-lsp-installer")
+
+-- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
+-- or if the server is already installed).
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "tsserver" then
+    --     opts.root_dir = function() ... end
+    -- end
+
+    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+    -- before passing it onwards to lspconfig.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(opts)
+end)
+EOF
