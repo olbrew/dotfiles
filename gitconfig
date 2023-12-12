@@ -1,20 +1,21 @@
 [user]
     name = olbrew
-	email = olivierbrewaeys@gmail.com
-[includeIf "gitdir:~/Developer/lemon/"]
-    path = ~/Developer/lemon/.gitconfig
+	email = 10660379+olbrew@users.noreply.github.com
+	signingKey = /Users/o/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/PublicKeys/937816c932363fd406c896cd1d97db33.pub
 [credential]
     helper = osxkeychain
 [core]
-    editor = nvim
-    excludesfile = ~/.gitignore_global
+    editor = hx
+    excludesfile = ~/.config/git/gitignore_global
     pager = bat
 [stash]
     showPatch = true
 [log]
     decorate = full
+[init]
+	defaultBranch = main
 [gpg]
-	program = /usr/local/bin/krgpg
+	format = ssh
 [commit]
 	gpgSign = true
 [tag]
