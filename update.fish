@@ -11,21 +11,17 @@ function update -d "Update all tools and applications on MacOS"
         brew cleanup
         echo \n
 
-        echo "💎 Updating Ruby Gems"
-        sudo gem update
-        echo \n
+#        echo "💎 Updating Ruby Gems"
+#        sudo gem update
+#        echo \n
 
-        echo "🐍 Updating Python"
-        pip list --outdated | awk '{print $1}' | xargs -n1 pip install -U
-        echo \n
+#        echo "🐍 Updating Python"
+#        pip list --outdated | awk '{print $1}' | xargs -n1 pip install -U
+#        echo \n
 
-        echo "✏️ Updating NeoVim"
-        nvim +PlugUpgrade +PlugUpdate +qall
-        echo \n
-
-        echo "📦 Updating NPM"
-        npm -g update
-        echo \n
+#        echo "📦 Updating NPM"
+#        npm --location=global update
+#        echo \n
 
         echo "🐡 Updating Fish Plugins and Completions"
         fundle self-update

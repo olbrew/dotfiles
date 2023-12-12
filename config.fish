@@ -12,13 +12,13 @@ fish_vi_key_bindings
 ### Install Fundle if not present
 if not functions -q fundle; eval (curl -sfL https://git.io/fundle-install); end
 ### Plugins
-fundle plugin 'IlanCosman/tide'
+fundle plugin 'oh-my-fish/theme-agnoster'
 fundle plugin 'jethrokuan/z'
 fundle plugin 'PatrickF1/fzf.fish'
 fundle plugin 'Gazorby/fish-abbreviation-tips'
 fundle plugin 'danhper/fish-fastdir'
-fundle plugin 'lilyball/nix-env.fish'
 fundle plugin 'danhper/fish-ssh-agent'
+fundle plugin 'meaningful-ooo/sponge'
 
 fundle init
 
@@ -41,18 +41,19 @@ set -x DEFAULT_USER o
 ### Set locale
 set -x LC_ALL 'en_US.UTF-8'
 ### Editor
-set -x EDITOR 'nvim'
+set -x EDITOR 'hx'
 ### Use fd as default command for fzf
 set -x FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git'
 set -x FZF_CTRL_T_COMMAND '$FZF_DEFAULT_COMMAND'
+### Set bat default color scheme
+set -x BAT_THEME ansi
 
 # Platform specific configuration
 switch (uname)
 case Darwin ## Mac
     ### Abbreviatons
     abbr --add --global log 'tail /var/log/system.log'
-    abbr --add --global mrpi 'mosh -p 62852 rpi4'
-    abbr --add --global yt 'youtube-dl -o "~/Downloads/%(title)s.%(ext)s"'
+    abbr --add --global mrpi 'mosh rpi4'
     abbr --add --global wt 'webtorrent --blocklist "https://list.iblocklist.com/?list=ydxerpxkpcfqjaybcssw&fileformat=p2p&archiveformat=gz" -o ~/Downloads/ download'
 
     ### Environment variables
@@ -64,17 +65,21 @@ case Darwin ## Mac
     set -x HOMEBREW_NO_ANALYTICS 1
     ## Kryptco
     set -x GPG_TTY (tty)
+    ## Secretive SSH Agent
+    set -x SSH_AUTH_SOCK /Users/o/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+
+    ### Paths
+    # Homebrew
+    fish_add_path /opt/homebrew/bin
 
 case Linux ## Linux
     ### Abbreviations
     abbr --add --global log 'tail /var/log/syslog'
-    abbr --add --global yt 'youtube-dl -o "/media/rpool/video/Short/%(title)s.%(ext)s"'
+    abbr --add --global yt 'yt-dlp -S ext -o "/media/rpool/video/Short/%(title)s.%(ext)s"'
     abbr --add --global temp 'echo "RPI4 CPU temperature is" (expr (cat /sys/class/thermal/thermal_zone0/temp) / 1000) "degrees celcius"'
 
     ### Environment variables
-    #### Nix locale fix on non-NixOS
-    set -x LOCALE_ARCHIVE '/usr/lib/locale/locale-archive'
-
-    ### Byobu config
-    status --is-login; and status --is-interactive; and exec byobu-launcher
 end
+
+### Byobu config
+status --is-login; and status --is-interactive; and exec byobu-launcher
